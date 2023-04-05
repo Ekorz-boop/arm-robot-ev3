@@ -14,18 +14,26 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 
 # Create your objects here.
 ev3 = EV3Brick()
+claw = Motor(Port.A)
+vertical_axis = Motor(Port.B, Direction.COUNTERCLOCKWISE, [8, 40])
+horizontal_axis = Motor(Port.C, Direction.COUNTERCLOCKWISE, [12, 36])
 
+vertical_axis.control.limits(speed=60, acceleration=120)
+horizontal_axis.control.limits(speed=60, acceleration=120)
 
 # Write your program here.
-ev3.speaker.beep()
 
 def pick_up():
-    #test
+    
+    claw.run(-5)
+    #vertical_axis.run(500)
+    #horizontal_axis.run(50)
 
 def main():
-    #test
+    pick_up()
+    ev3.speaker.beep()
 
-
-if __name__ == "main":
-    main ():
+if __name__ == "__main__":
+    main()
+    
         
