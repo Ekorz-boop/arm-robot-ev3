@@ -22,10 +22,17 @@ vertical_axis.control.limits(speed=60, acceleration=120)
 horizontal_axis.control.limits(speed=60, acceleration=120)
 
 # Write your program here.
-
 def pick_up():
-    
-    
+    """Function that makes the claw grip and move upward (picking up)"""
+    for i in range(1, 10):
+        claw.run(10)
+        
+
+
+    for i in range(1, 10):
+        vertical_axis.run(10)
+        vertical_axis.reset_angle(0)
+
 
 def main():
     pick_up()
@@ -33,4 +40,3 @@ def main():
 
 if __name__ == "__main__":
     main()
- 
