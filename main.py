@@ -38,5 +38,11 @@ def main():
     pick_up()
 
 
+def stay_up():
+    on = True 
+    while on == True:
+    {
+
+    }
 if __name__ == "__main__":
     main()
