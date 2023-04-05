@@ -25,15 +25,12 @@ horizontal_axis.control.limits(speed=60, acceleration=120)
 
 def pick_up():
     
-    claw.run(-5)
-    #vertical_axis.run(500)
-    #horizontal_axis.run(50)
+    
 
 def main():
     pick_up()
-    ev3.speaker.beep()
+
 
 if __name__ == "__main__":
     main()
-    
-        
+ 
