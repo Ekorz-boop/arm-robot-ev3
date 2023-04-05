@@ -20,10 +20,10 @@ ev3 = EV3Brick()
 ev3.speaker.beep()
 
 def pick_up():
-
+    #test
 
 def main():
-    
+    #test
 
 
 if __name__ == "main":
