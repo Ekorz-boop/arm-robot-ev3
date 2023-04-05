@@ -33,6 +33,12 @@ def main():
     pick_up()
     ev3.speaker.beep()
 
+def stay_up():
+    on = True 
+    while on == True:
+    {
+
+    }
 if __name__ == "__main__":
     main()
     
