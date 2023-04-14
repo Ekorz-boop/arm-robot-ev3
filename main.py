@@ -30,7 +30,7 @@ vertical_axis.reset_angle(0)
 # Write your program here.
 def pick_up():
     """Function that makes the claw grip and move upward (picking up)"""
-    claw.run_until_stalled(-100, then=Stop.COAST, duty_limit=50)
+    claw.run_until_stalled(-100, then=Stop.HOLD, duty_limit=50)
     vertical_axis.run_target(20, 120, then=Stop.HOLD)
 
 
@@ -41,7 +41,7 @@ def drop():
     vertical_axis.run_target(40, 80, then=Stop.HOLD)
 
 
-def checklocation():
+def check_location():
     """Cheks if an item is at precent at a given locations and returns true"""
     claw.run_until_stalled(20, then=Stop.HOLD, duty_limit=50)
     if (claw.angle() > -10):
