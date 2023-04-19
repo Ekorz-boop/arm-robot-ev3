@@ -46,3 +46,8 @@ def stay_up():
     }
 if __name__ == "__main__":
     main()
+#hej!
+fre
+gripsefd
+fesf
+""
