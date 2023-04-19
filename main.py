@@ -32,6 +32,8 @@ vertical_axis.reset_angle(0)
 
 color_sensor = ColorSensor(Port.S2)
 
+zone_dict = {}
+
 # Write your program here.
 def pick_up():
     """Function that makes the claw grip and move upward (picking up)"""
@@ -65,8 +67,19 @@ def free_control():
         horizontal_axis.run(45)
     else:
         horizontal_axis.run(0)
-    
+        
+def create_zone():
+    """Function for creating zones at a designated position and saving it in the zone dictionary"""
+    pressed = ev3.buttons.pressed()
+    current_zone_num = 0
+    if Button.BEACON in pressed:
+        current_angle = horizontal_axis.angle()
+        current_zone_num += 1
+        zone_dict[f"zone {current_zone_num}"] = current_angle
+        if current_zone_num >= 4:
+            current_zone_num = 0
 
+        
 def color_check():
     """function tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
