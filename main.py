@@ -32,6 +32,10 @@ vertical_axis.reset_angle(0)
 
 color_sensor = ColorSensor(Port.S2)
 
+drop_of_color_1 = null
+drop_of_color_2 = null
+drop_of_color_3 = null
+
 # Write your program here.
 def pick_up():
     """Function that makes the claw grip and move upward (picking up)"""
@@ -63,14 +67,27 @@ def free_control():
 def color_check():
     """function tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
-    print(color_sensor.color())
+    color = color_sensor.color()
+    return color
+
+def drop_of_color_calibrate():
+    if drop_of_color_1 == null:
+        drop_of_color_1 = color_check()
+    elif (drop_of_color_1 != null and drop_of_color_2 == null):
+        drop_of_color_2= color_check()
+    elif(drop_of_color_1 != null and drop_of_color_2 != null and drop_of_color_2 == null):
+        drop_of_color_3 = color_check()
+    else 
+    print(drop_of_color_1,drop_of_color_2,drop_of_color_3 )
+
 
 def main():
-    # Item = False
-    # Item = check_location()
-    # if check_location():
-    #     pick_up()
-    #     drop()
+    Item = False
+    Item = check_location()
+    if check_location():
+        pick_up()
+        drop()
+    drop_of_color()
     while True:
         free_control()
 
