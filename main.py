@@ -54,15 +54,22 @@ def check_location():
         return True
 
 def free_control():
+    """Function for controlling the arm free form"""
     pressed = ev3.buttons.pressed()
-    print(pressed)
+    if Button.LEFT in pressed:
+        horizontal_axis.run(-45)
+    elif Button.RIGHT in pressed:
+        horizontal_axis.run(45)
+    else:
+        horizontal_axis.run(0)
+    
 
 def main():
-    # Item = False
-    # Item = check_location()
-    # if check_location():
-    #     pick_up()
-    #     drop()
+    item = False
+    item = check_location()
+    if check_location():
+        pick_up()
+        drop()
     while True:
         free_control()
 
