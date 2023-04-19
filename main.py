@@ -32,9 +32,9 @@ vertical_axis.reset_angle(0)
 
 color_sensor = ColorSensor(Port.S2)
 
-drop_of_color_1 = null
-drop_of_color_2 = null
-drop_of_color_3 = null
+drop_of_color_1 = None
+drop_of_color_2 = None
+drop_of_color_3 = None
 
 # Write your program here.
 def pick_up():
@@ -61,8 +61,17 @@ def check_location():
         return True
 
 def free_control():
+    """Function for controlling the arm free form"""
     pressed = ev3.buttons.pressed()
-    print(pressed)
+    if Button.LEFT in pressed:
+        horizontal_axis.run(-45)
+    elif Button.RIGHT in pressed:
+        horizontal_axis.run(45)
+    elif Button.UP in pressed:
+        drop_of_color_calibrate()
+    else:
+        horizontal_axis.run(0)
+    
 
 def color_check():
     """function tells the color"""
@@ -71,23 +80,31 @@ def color_check():
     return color
 
 def drop_of_color_calibrate():
-    if drop_of_color_1 == null:
+    global drop_of_color_1
+    global drop_of_color_2
+    global drop_of_color_3
+    if drop_of_color_1 == None:
         drop_of_color_1 = color_check()
-    elif (drop_of_color_1 != null and drop_of_color_2 == null):
-        drop_of_color_2= color_check()
-    elif(drop_of_color_1 != null and drop_of_color_2 != null and drop_of_color_2 == null):
+        print("color1",drop_of_color_1)
+        wait(200)
+    elif (drop_of_color_1 != None and drop_of_color_2 == None and drop_of_color_3 == None):
+        drop_of_color_2 = color_check()
+        print("color2",drop_of_color_2)
+        wait(200)
+    elif(drop_of_color_1 != None and drop_of_color_2 != None and drop_of_color_3 == None):
         drop_of_color_3 = color_check()
-    else 
-    print(drop_of_color_1,drop_of_color_2,drop_of_color_3 )
+        print("color3",drop_of_color_3)
+        wait(200)
+    else:
+        print("All colors calibratet")
 
 
 def main():
-    Item = False
-    Item = check_location()
-    if check_location():
-        pick_up()
-        drop()
-    drop_of_color()
+    # Item = False
+    # Item = check_location()
+    # if check_location():
+    #     pick_up()
+    #     drop()
     while True:
         free_control()
 
