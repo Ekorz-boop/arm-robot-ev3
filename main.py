@@ -6,6 +6,7 @@ from pybricks.parameters import Port, Stop, Direction, Button, Color
 from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
+from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 
 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
@@ -28,6 +29,8 @@ claw.reset_angle(0)
 claw.run_target(200, -90)
 vertical_axis.run_until_stalled(-20, then=Stop.COAST, duty_limit=50)
 vertical_axis.reset_angle(0)
+
+color_sensor = ColorSensor(Port.S2)
 
 # Write your program here.
 def pick_up():
@@ -64,6 +67,11 @@ def free_control():
         horizontal_axis.run(0)
     
 
+def color_check():
+    """function tells the color"""
+    vertical_axis.run_target(40, 95, then=Stop.HOLD)
+    print(color_sensor.color())
+
 def main():
     item = False
     item = check_location()
@@ -77,4 +85,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-#test test sak sak
+#hrj
