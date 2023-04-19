@@ -17,37 +17,57 @@ ev3 = EV3Brick()
 claw = Motor(Port.A)
 vertical_axis = Motor(Port.B, Direction.COUNTERCLOCKWISE, [8, 40])
 horizontal_axis = Motor(Port.C, Direction.COUNTERCLOCKWISE, [12, 36])
+left_button = Button.LEFT_DOWN
+
 
 vertical_axis.control.limits(speed=60, acceleration=120)
 horizontal_axis.control.limits(speed=60, acceleration=120)
 
+claw.run_until_stalled(200, then=Stop.COAST, duty_limit=50)
+claw.reset_angle(0)
+claw.run_target(200, -90)
+vertical_axis.run_until_stalled(-20, then=Stop.COAST, duty_limit=50)
+vertical_axis.reset_angle(0)
+
 # Write your program here.
 def pick_up():
     """Function that makes the claw grip and move upward (picking up)"""
-    for i in range(1, 10):
-        claw.run(10)
-        
+    claw.run_until_stalled(-100, then=Stop.HOLD, duty_limit=50)
+    vertical_axis.run_target(20, 120, then=Stop.HOLD)
 
 
-    for i in range(1, 10):
-        vertical_axis.run(10)
-        vertical_axis.reset_angle(0)
+def drop():
+    """Function that gently puts the item down and drops it"""
+    vertical_axis.run_target(20, 70, then=Stop.HOLD)
+    claw.run_target(20, -90)
+    vertical_axis.run_target(40, 80, then=Stop.HOLD)
 
+
+def check_location():
+    """Cheks if an item is at precent at a given locations and returns true"""
+    claw.run_until_stalled(20, then=Stop.HOLD, duty_limit=50)
+    if (claw.angle() > -10):
+        print("No Item")
+        return False
+    else:
+        print("Item")
+        return True
+
+def free_control():
+    pressed = ev3.buttons.pressed()
+    print(pressed)
 
 def main():
-    pick_up()
+    # Item = False
+    # Item = check_location()
+    # if check_location():
+    #     pick_up()
+    #     drop()
+    while True:
+        free_control()
 
 
-def stay_up():
-    on = True 
-    while on == True:
-    {
-
-    }
 if __name__ == "__main__":
     main()
-#hej!
-fre
-gripsefd
-fesf
-""
+
+#hrj
