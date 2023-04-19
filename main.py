@@ -17,6 +17,8 @@ ev3 = EV3Brick()
 claw = Motor(Port.A)
 vertical_axis = Motor(Port.B, Direction.COUNTERCLOCKWISE, [8, 40])
 horizontal_axis = Motor(Port.C, Direction.COUNTERCLOCKWISE, [12, 36])
+left_button = Button.LEFT_DOWN
+
 
 vertical_axis.control.limits(speed=60, acceleration=120)
 horizontal_axis.control.limits(speed=60, acceleration=120)
@@ -51,13 +53,18 @@ def check_location():
         print("Item")
         return True
 
+def free_control():
+    pressed = ev3.buttons.pressed()
+    print(pressed)
 
 def main():
-    Item = False
-    Item = check_location()
-    if check_location():
-        pick_up()
-        drop()
+    # Item = False
+    # Item = check_location()
+    # if check_location():
+    #     pick_up()
+    #     drop()
+    while True:
+        free_control()
 
 
 if __name__ == "__main__":
