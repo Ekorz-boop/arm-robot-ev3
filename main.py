@@ -68,6 +68,7 @@ def check_location():
         print("Item")
         return True
 
+
 def free_control(pressed):
     """Function for controlling the arm free form"""
     if Button.LEFT in pressed:
@@ -123,7 +124,8 @@ def get_v_angle(zone):
         if key == zone:
             cord_tuple = zone_dict[zone]
             return cord_tuple[1]
-            
+
+     
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
@@ -133,22 +135,23 @@ def go_to_zone(zone):
         speed = speed * -1
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
+    
+    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD)
     horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
     vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
 
 def set_pickup_zone(zone):
+    """Sets the pickup zone to the start position"""
     global start
     start = zone
 
-def pickup_from_star():
+def pickup_from_start():
+    """Pick up block from the starting position"""
     global start
     zone = start
     go_to_zone(zone)
     check_location()
     pick_up()
-
-
-    
 
 
 def color_check():
@@ -197,7 +200,8 @@ def movement_menu():
         
         if Button.CENTER in pressed:
             run = False
-            
+
+   
 def zone_menu():
     """Handles the zone menu"""
     menu_zone = """
@@ -285,6 +289,7 @@ def color_zone_menu():
         pressed = ev3.buttons.pressed()
         if Button.UP in pressed:
             color_match_menu()
+        
         if Button.CENTER in pressed:
             run = False
             
@@ -387,8 +392,8 @@ def main():
     #     pick_up()
     #     drop()
     #interface()
-    pass
+    interface()
 
 
 if __name__ == "__main__":
-    interface()
+    main()
