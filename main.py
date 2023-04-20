@@ -35,6 +35,7 @@ color_sensor = ColorSensor(Port.S2)
 
 zone_dict = {} #Handles which zone have which angle coordinates
 color_dict = {} #Handles which color have which zone
+start = None
 current_zone_num = 0
 
 drop_of_color_1 = None
@@ -128,6 +129,7 @@ def get_v_angle(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
+    vertical_axis.run_target(70, 70, then=Stop.HOLD) 
     speed = 70
     if get_h_angle(zone) <= 0:
         speed = speed * -1
@@ -136,6 +138,20 @@ def go_to_zone(zone):
     
     vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
     horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
+
+def set_pickup_zone(zone):
+    global start
+    start = zone
+
+def pickup_from_star():
+    global start
+    zone = start
+    go_to_zone(zone)
+    check_location()
+    pick_up()
+
+
+    
 
 
 def color_check():
