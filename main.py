@@ -67,6 +67,7 @@ def check_location():
         print("Item")
         return True
 
+
 def free_control(pressed):
     """Function for controlling the arm free form"""
     if Button.LEFT in pressed:
@@ -122,7 +123,8 @@ def get_v_angle(zone):
         if key == zone:
             cord_tuple = zone_dict[zone]
             return cord_tuple[1]
-            
+
+     
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
@@ -182,7 +184,8 @@ def movement_menu():
         
         if Button.CENTER in pressed:
             run = False
-            
+
+   
 def zone_menu():
     """Handles the zone menu"""
     menu_zone = """
@@ -270,8 +273,6 @@ def color_zone_menu():
         pressed = ev3.buttons.pressed()
         if Button.UP in pressed:
             color_match_menu()
-        
-        
         
         if Button.CENTER in pressed:
             run = False
@@ -375,8 +376,8 @@ def main():
     #     pick_up()
     #     drop()
     #interface()
-    pass
+    interface()
 
 
 if __name__ == "__main__":
-    interface()
+    main()
