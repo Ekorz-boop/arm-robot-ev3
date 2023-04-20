@@ -105,9 +105,15 @@ def get_v_cord(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
-    horizontal_axis.run_target(get_h_cord(zone), 70, then=Stop.COAST)
-    vertical_axis.run_target(get_v_cord(zone), 70, then=Stop.COAST)
+    speed = 70
+    if get_h_cord(zone) <= 110:
+        speed = speed * -1
+    elif get_h_cord(zone) <= 110 and speed == -70:
+        speed = speed * -1
         
+    horizontal_axis.run_target(get_h_cord(zone), speed, then=Stop.COAST)
+    vertical_axis.run_target(get_v_cord(zone), 70, then=Stop.COAST)
+    
 
 def color_check():
     """function tells the color"""
