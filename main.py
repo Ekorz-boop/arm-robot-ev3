@@ -135,8 +135,6 @@ def go_to_zone(zone):
         speed = speed * -1
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
-    
-    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD)
     horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
     vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
 
