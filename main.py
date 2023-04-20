@@ -67,27 +67,30 @@ def free_control(pressed):
     elif Button.RIGHT in pressed:
         horizontal_axis.run(45)
     elif Button.UP in pressed:
-        drop_of_color_calibrate()
+        vertical_axis.run(45)
+    elif Button.DOWN in pressed:
+        vertical_axis.run(-45)
     else:
         horizontal_axis.stop()
+        vertical_axis.stop()
+        
         
 
-def create_zone(pressed):
+def create_zone():
     """Function for creating zones at a designated position and saving it in the zone dictionary"""
     global current_zone_num
-    if Button.UP in pressed:
-        current_h_angle = horizontal_axis.angle()
-        current_v_angle = vertical_axis.angle()
-        current_zone_num += 1
-        angle_tuple = (current_h_angle, current_v_angle)
-        zone_dict[current_zone_num] = angle_tuple
-        if current_zone_num >= 4:
-            current_zone_num = 0
-        wait(200)
+    current_h_angle = horizontal_axis.angle()
+    current_v_angle = vertical_axis.angle()
+    current_zone_num += 1
+    angle_tuple = (current_h_angle, current_v_angle)
+    zone_dict[str(current_zone_num)] = angle_tuple
+    if current_zone_num >= 4:
+        current_zone_num = 0
+    wait(200)
         
             
 def go_to_zone(zone):
-    """Function that turns the arnm to the desigated zone"""
+    """Function that turns the arm to the desigated zone"""
     horizontal_axis.run_target(zone_dict.get(zone[0]), 70, then=Stop.COAST)
     vertical_axis.run_target(zone_dict.get(zone[1]), 70, then=Stop.COAST)
         
@@ -116,98 +119,106 @@ def drop_of_color_calibrate():
     else:
         print("All colors calibratet")
 
-def interface():
-    menu_layer_1 = """
-    L. Zone Menu
-    U. Color Menu
-    R. 
-    D.
+
+def movement_menu():
+    menu_movement = """
+    L. Left
+    U. Up
+    R. Right
+    D. Down
     """
+    run = True
+    while run:
+        print(menu_movement)
+        pressed = ev3.buttons.pressed()
+        free_control(pressed)
+        
+        if Button.CENTER in pressed:
+            run = False
+            
+def zone_menu():
     menu_zone = """
-    L. Move Left
+    L. 
     U. Create Zone
-    R. Move Right
-    D. Go to Zone
+    R. 
+    D. Go to zone
     """
-    menu_color = """
-    L.
-    U.
-    R.
-    D.
-    """
-    menu_zones = """
-    Choose which zone to go to
+    menu_zone_choice = """
     L. Zone 1
     U. Zone 2
     R. Zone 3
     D. Zone 4
     """
-    current_menu = menu_layer_1
+    zone = "1"
     run = True
     while run:
         pressed = ev3.buttons.pressed()
-        #print(current_menu)
-        if current_menu == menu_layer_1:
+        print(menu_zone)
+        if Button.UP in pressed:
+            create_zone()
+        elif Button.DOWN in pressed:
+            print(menu_zone_choice)
             if Button.LEFT in pressed:
-                current_menu = menu_zone
+                zone = "1"
+                go_to_zone(zone)
                 
             elif Button.UP in pressed:
-                current_menu = menu_color
+                zone = "2"
+                go_to_zone(zone)
                 
+            elif Button.RIGHT in pressed:
+                zone = "3"
+                go_to_zone(zone)
+                
+            elif Button.DOWN in pressed:
+                zone = "4"
+                go_to_zone(zone)
         
-        elif current_menu == menu_zone:
-            zone = 1
-            if Button.LEFT in pressed:
-                print(pressed)
-                free_control(pressed)
-                
-                
-            elif Button.UP in pressed:
-                create_zone(pressed)
-                
-                
-            elif Button.RIGHT in pressed:
-                print(pressed)
-                free_control(pressed)
-                
-                
-            elif Button.DOWN in pressed:
-                print(menu_zones)
-                
-                if Button.LEFT in pressed:
-                    zone = 1
-                    go_to_zone(zone)
-                    
-                
-                elif Button.UP in pressed:
-                    zone = 2
-                    go_to_zone(zone)
-                    
-                    
-                elif Button.RIGHT in pressed:
-                    zone = 3
-                    go_to_zone(zone)
-                    
-                    
-                elif Button.DOWN in pressed:
-                    zone = 4
-                    go_to_zone(zone)
-                    
+        if Button.CENTER in pressed:
+            run = False
+        
+
+def color_menu():
+    menu_color = """
+    L. Left
+    U. Up
+    R. Right
+    D. Down
+    """
+    run = True
+    while run:
+        print(menu_color)
+        pressed = ev3.buttons.pressed()
+        if Button.CENTER in pressed:
+            run = False
+
+
+def interface():
+    menu_1 = """
+    L. Zone Menu
+    U. Color Menu
+    R. Movement
+    D. Bad functions
+    """
+    run = True
+    while run:
+        print(menu_1)
+        pressed = ev3.buttons.pressed()
+        
+        if Button.LEFT in pressed:
+            zone_menu()
             
+        elif Button.RIGHT in pressed:
+            movement_menu()
             
-        elif current_menu == menu_color:
-            if Button.LEFT in pressed:
-                pass
-            elif Button.UP in pressed:
-                pass
-            elif Button.RIGHT in pressed:
-                pass
-            elif Button.DOWN in pressed:
-                pass
+        elif Button.UP in pressed:
+            color_menu()
             
-        elif Button.CENTER in pressed:
-            current_menu = menu_layer_1
-            wait(150)
+        elif Button.DOWN in pressed:
+            pass
+        
+        
+        
         
                 
 def main():
