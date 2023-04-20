@@ -96,6 +96,7 @@ def color_check():
     """function tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
     color = color_sensor.color()
+    print(color)
     return color
 
 
@@ -105,15 +106,12 @@ def drop_of_color_calibrate():
     global drop_of_color_3
     if drop_of_color_1 == None:
         drop_of_color_1 = color_check()
-        print("color1",drop_of_color_1)
         wait(200)
     elif (drop_of_color_1 != None and drop_of_color_2 == None and drop_of_color_3 == None):
         drop_of_color_2 = color_check()
-        print("color2",drop_of_color_2)
         wait(200)
     elif(drop_of_color_1 != None and drop_of_color_2 != None and drop_of_color_3 == None):
         drop_of_color_3 = color_check()
-        print("color3",drop_of_color_3)
         wait(200)
     else:
         print("All colors calibratet")
@@ -225,5 +223,3 @@ def main():
 
 if __name__ == "__main__":
     interface()
-
-#hrj
