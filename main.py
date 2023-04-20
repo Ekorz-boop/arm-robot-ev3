@@ -22,8 +22,8 @@ horizontal_axis = Motor(Port.C, Direction.COUNTERCLOCKWISE, [12, 36])
 left_button = Button.LEFT_DOWN
 
 
-vertical_axis.control.limits(speed=60, acceleration=120)
-horizontal_axis.control.limits(speed=60, acceleration=120)
+vertical_axis.control.limits(speed=60, acceleration=60)
+horizontal_axis.control.limits(speed=60, acceleration=60)
 
 claw.run_until_stalled(200, then=Stop.COAST, duty_limit=50)
 claw.reset_angle(0)
@@ -33,8 +33,13 @@ vertical_axis.reset_angle(0)
 
 color_sensor = ColorSensor(Port.S2)
 
-zone_dict = {}
+zone_dict = {} #Handles which zone have which angle coordinates
+color_dict = {} #Handles which color have which zone
 current_zone_num = 0
+
+drop_of_color_1 = None
+drop_of_color_2 = None
+drop_of_color_3 = None
 
 # Write your program here.
 def pick_up():
@@ -95,6 +100,12 @@ def create_zone():
         current_zone_num = 0
         
     wait(200)
+    
+    
+def assign_color(color, zone):
+    """Assigns a zone to a color and saves it in a dictionary"""
+    color_dict[str(color)] = zone
+    wait(200)
 
 
 def get_h_angle(zone):
@@ -116,14 +127,14 @@ def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
     speed = 70
-    if get_h_angle(zone) <= 110:
+    if get_h_angle(zone) <= 0:
         speed = speed * -1
-    elif get_h_angle(zone) <= 110 and speed == -70:
+    elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
-        
+    
+    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
     horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
-    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.COAST)
-       
+
 
 def color_check():
     """Function that tells the color"""
@@ -241,6 +252,87 @@ def color_menu():
     while run:
         print(menu_color)
         pressed = ev3.buttons.pressed()
+        if Button.CENTER in pressed:
+            run = False
+            
+
+def color_zone_menu():
+    """Handles the color zones menu"""
+    menu_color_zone = """
+    L. 
+    U. Assign color to zone
+    R. 
+    D. 
+    """
+    run = True
+    while run:
+        print(menu_color_zone)
+        pressed = ev3.buttons.pressed()
+        if Button.UP in pressed:
+            color_match_menu()
+        
+        
+        
+        if Button.CENTER in pressed:
+            run = False
+            
+
+def color_match_menu():
+    """Handles the color match menu"""
+    menu_color_match = f"""
+    L. 
+    U. 
+    R. 
+    D. 
+    """
+    run = True
+    while run:
+        print(menu_color_match)
+        pressed = ev3.buttons.pressed()
+        
+        if Button.LEFT in pressed:
+            
+            
+        elif Button.UP in pressed:
+            
+            
+        elif Button.RIGHT in pressed:
+            
+            
+        elif Button.DOWN in pressed:
+        
+        
+        
+        if Button.CENTER in pressed:
+            run = False
+
+
+def color_match_menu():
+    """Handles the color match menu"""
+    menu_color_match = f"""
+    L. Zone 1
+    U. Zone 2
+    R. Zone 3
+    D. Zone 4
+    """
+    run = True
+    while run:
+        print(menu_color_match)
+        pressed = ev3.buttons.pressed()
+        
+        if Button.LEFT in pressed:
+            
+            s
+        elif Button.UP in pressed:
+            
+            
+        elif Button.RIGHT in pressed:
+            
+            
+        elif Button.DOWN in pressed:
+        
+        
+        
         if Button.CENTER in pressed:
             run = False
 
