@@ -87,13 +87,26 @@ def create_zone():
     if current_zone_num >= 4:
         current_zone_num = 0
     wait(200)
-        
+
+
+def get_h_cord(zone):
+    for key in zone_dict:
+        if key == zone:
+            cord_tuple = zone_dict[zone]
+            return cord_tuple[0]
+
+
+def get_v_cord(zone):
+    for key in zone_dict:
+        if key == zone:
+            cord_tuple = zone_dict[zone]
+            return cord_tuple[1]
             
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
-    horizontal_axis.run_target(zone_dict.get(zone)[0], 70, then=Stop.COAST)
-    vertical_axis.run_target(zone_dict.get(zone)[1], 70, then=Stop.COAST)
+    horizontal_axis.run_target(get_h_cord(zone), 70, then=Stop.COAST)
+    vertical_axis.run_target(get_v_cord(zone), 70, then=Stop.COAST)
         
 
 def color_check():
@@ -144,13 +157,6 @@ def zone_menu():
     R. 
     D. Go to zone
     """
-    menu_zone_choice = """
-    L. Zone 1
-    U. Zone 2
-    R. Zone 3
-    D. Zone 4
-    """
-    zone = "1"
     run = True
     while run:
         pressed = ev3.buttons.pressed()
@@ -159,27 +165,45 @@ def zone_menu():
             create_zone()
             wait(500)
         elif Button.DOWN in pressed:
-            print(menu_zone_choice)
-            wait(1000)
-            if Button.LEFT in pressed:
-                zone = "1"
-                go_to_zone(zone)
-                
-            elif Button.UP in pressed:
-                zone = "2"
-                go_to_zone(zone)
-                
-            elif Button.RIGHT in pressed:
-                zone = "3"
-                go_to_zone(zone)
-                
-            elif Button.DOWN in pressed:
-                zone = "4"
-                go_to_zone(zone)
+            wait(500)
+            go_to_zone_menu()
+            
         
         if Button.CENTER in pressed:
             run = False
         
+
+def go_to_zone_menu():
+    menu_zone_choice = """
+    L. Zone 1
+    U. Zone 2
+    R. Zone 3
+    D. Zone 4
+    """
+    
+    run = True
+    while run:
+        pressed = ev3.buttons.pressed()
+        print(menu_zone_choice)
+        if Button.LEFT in pressed:
+            zone = "1"
+            go_to_zone(zone)
+                    
+        elif Button.UP in pressed:
+            zone = "2"
+            go_to_zone(zone)
+            
+        elif Button.RIGHT in pressed:
+            zone = "3"
+            go_to_zone(zone)
+            
+        elif Button.DOWN in pressed:
+            zone = "4"
+            go_to_zone(zone)
+            
+        if Button.CENTER in pressed:
+            run = False
+
 
 def color_menu():
     menu_color = """
