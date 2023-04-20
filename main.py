@@ -293,36 +293,41 @@ def color_zone_menu():
 def color_match_menu():
     """Handles the color match menu"""
     menu_color_match = """
-    L. 
-    U. 
-    R. 
-    D. 
-    """
+    Choose which color you want to assign to a zone
+    L. Color 1 {drop_of_color_1}
+    U. Color 2 {drop_of_color_2}
+    R. Color 3 {drop_of_color_3}
+    D.
+    """.format(drop_of_color_1=drop_of_color_1, drop_of_color_2=drop_of_color_2, drop_of_color_3=drop_of_color_3)
+    chosen_color = drop_of_color_1
     run = True
     while run:
         print(menu_color_match)
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
-           
+            color_match_menu_2(chosen_color)
             
         elif Button.UP in pressed:
-          
+            chosen_color = drop_of_color_2
+            color_match_menu_2(chosen_color)
             
         elif Button.RIGHT in pressed:
-            
+            chosen_color = drop_of_color_3
+            color_match_menu_2(chosen_color)
             
         elif Button.DOWN in pressed:
-          
-        
+            chosen_color = drop_of_color_1
+            color_match_menu_2(chosen_color)
         
         if Button.CENTER in pressed:
             run = False
 
 
-def color_match_menu():
-    """Handles the color match menu"""
-    menu_color_match = f"""
+def color_match_menu_2(chosen_color):
+    """Handles the second phase of the color match menu"""
+    menu_color_match_2 = """
+    Choose which zone to assign chosen color to
     L. Zone 1
     U. Zone 2
     R. Zone 3
@@ -330,21 +335,20 @@ def color_match_menu():
     """
     run = True
     while run:
-        print(menu_color_match)
+        print(menu_color_match_2)
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
+            assign_color(chosen_color, "1")
             
-            s
         elif Button.UP in pressed:
-            
+            assign_color(chosen_color, "2")
             
         elif Button.RIGHT in pressed:
-            
+            assign_color(chosen_color, "3")
             
         elif Button.DOWN in pressed:
-        
-        
+            assign_color(chosen_color, "4")
         
         if Button.CENTER in pressed:
             run = False
@@ -373,12 +377,9 @@ def interface():
             color_menu()
             
         elif Button.DOWN in pressed:
-            pass
+            color_zone_menu()
+            
         
-        
-        
-        
-                
 def main():
     """Main function"""
     # item = False
