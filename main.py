@@ -127,15 +127,14 @@ def get_v_angle(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
-    vertical_axis.run_target(70, 70, then=Stop.HOLD) 
+    vertical_axis.run_target(-120, 70, then=Stop.HOLD) 
     speed = 70
     if get_h_angle(zone) <= 0:
         speed = speed * -1
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
-    
-    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
     horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
+    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
 
 def set_pickup_zone(zone):
     global start
