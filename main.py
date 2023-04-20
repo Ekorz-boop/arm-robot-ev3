@@ -66,6 +66,8 @@ def free_control(pressed):
         horizontal_axis.run(-45)
     elif Button.RIGHT in pressed:
         horizontal_axis.run(45)
+    elif Button.UP in pressed:
+        drop_of_color_calibrate()
     else:
         horizontal_axis.stop()
         
@@ -91,7 +93,124 @@ def go_to_zone(zone):
 def color_check():
     """function tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
-    print(color_sensor.color())
+    color = color_sensor.color()
+    return color
+
+def drop_of_color_calibrate():
+    global drop_of_color_1
+    global drop_of_color_2
+    global drop_of_color_3
+    if drop_of_color_1 == None:
+        drop_of_color_1 = color_check()
+        print("color1",drop_of_color_1)
+        wait(200)
+    elif (drop_of_color_1 != None and drop_of_color_2 == None and drop_of_color_3 == None):
+        drop_of_color_2 = color_check()
+        print("color2",drop_of_color_2)
+        wait(200)
+    elif(drop_of_color_1 != None and drop_of_color_2 != None and drop_of_color_3 == None):
+        drop_of_color_3 = color_check()
+        print("color3",drop_of_color_3)
+        wait(200)
+    else:
+        print("All colors calibratet")
+
+
+def interface():
+    menu_layer_1 = """
+    L. Zone Menu
+    U. Color Menu
+    R. 
+    D.
+    """
+    menu_zone = """
+    L. Move Left
+    U. Create Zone
+    R. Move Right
+    D. Go to Zone
+    """
+    menu_color = """
+    L.
+    U.
+    R.
+    D.
+    """
+    menu_zones = """
+    Choose which zone to go to
+    L. Zone 1
+    U. Zone 2
+    R. Zone 3
+    D. Zone 4
+    """
+    current_menu = menu_layer_1
+    run = True
+    while run:
+        pressed = ev3.buttons.pressed()
+        #print(current_menu)
+        if current_menu == menu_layer_1:
+            if Button.LEFT in pressed:
+                current_menu = menu_zone
+                
+            elif Button.UP in pressed:
+                current_menu = menu_color
+                
+        
+        elif current_menu == menu_zone:
+            zone = 1
+            if Button.LEFT in pressed:
+                print(pressed)
+                free_control(pressed)
+                
+                
+            elif Button.UP in pressed:
+                create_zone(pressed)
+                
+                
+            elif Button.RIGHT in pressed:
+                print(pressed)
+                free_control(pressed)
+                
+                
+            elif Button.DOWN in pressed:
+                print(menu_zones)
+                
+                if Button.LEFT in pressed:
+                    zone = 1
+                    go_to_zone(zone)
+                    
+                
+                elif Button.UP in pressed:
+                    zone = 2
+                    go_to_zone(zone)
+                    
+                    
+                elif Button.RIGHT in pressed:
+                    zone = 3
+                    go_to_zone(zone)
+                    
+                    
+                elif Button.DOWN in pressed:
+                    zone = 4
+                    go_to_zone(zone)
+                    
+            
+            
+        elif current_menu == menu_color:
+            if Button.LEFT in pressed:
+                pass
+            elif Button.UP in pressed:
+                pass
+            elif Button.RIGHT in pressed:
+                pass
+            elif Button.DOWN in pressed:
+                pass
+            
+        elif Button.CENTER in pressed:
+            current_menu = menu_layer_1
+            wait(150)
+        
+                
+        
 
 def interface():
     menu_layer_1 = """
