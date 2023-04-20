@@ -136,22 +136,21 @@ def go_to_zone(zone):
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
     
-    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
+    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD)
     horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
 
 def set_pickup_zone(zone):
+    """Sets the pickup zone to the start position"""
     global start
     start = zone
 
-def pickup_from_star():
+def pickup_from_start():
+    """Pick up block from the starting position"""
     global start
     zone = start
     go_to_zone(zone)
     check_location()
     pick_up()
-
-
-    
 
 
 def color_check():
