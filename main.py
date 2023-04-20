@@ -53,9 +53,11 @@ def drop():
 def check_location():
     """Cheks if an item is at precent at a given locations and returns true"""
     claw.run_until_stalled(20, then=Stop.HOLD, duty_limit=50)
+    
     if (claw.angle() > -10):
         print("No Item")
         return False
+    
     else:
         print("Item")
         return True
@@ -64,39 +66,47 @@ def free_control(pressed):
     """Function for controlling the arm free form"""
     if Button.LEFT in pressed:
         horizontal_axis.run(-45)
+        
     elif Button.RIGHT in pressed:
         horizontal_axis.run(45)
+        
     elif Button.UP in pressed:
         vertical_axis.run(45)
+        
     elif Button.DOWN in pressed:
         vertical_axis.run(-45)
+        
     else:
         horizontal_axis.stop()
         vertical_axis.stop()
         
         
-
 def create_zone():
     """Function for creating zones at a designated position and saving it in the zone dictionary"""
     global current_zone_num
     current_h_angle = horizontal_axis.angle()
     current_v_angle = vertical_axis.angle()
+    
     current_zone_num += 1
     angle_tuple = (current_h_angle, current_v_angle)
     zone_dict[str(current_zone_num)] = angle_tuple
+    
     if current_zone_num >= 4:
         current_zone_num = 0
+        
     wait(200)
 
 
-def get_h_cord(zone):
+def get_h_angle(zone):
+    """Gives the horizontal angle of target zone in the zone dictionary"""
     for key in zone_dict:
         if key == zone:
             cord_tuple = zone_dict[zone]
             return cord_tuple[0]
 
 
-def get_v_cord(zone):
+def get_v_angle(zone):
+    """Gives the vertical angle of target zone in the zone dictionary"""
     for key in zone_dict:
         if key == zone:
             cord_tuple = zone_dict[zone]
@@ -106,17 +116,17 @@ def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
     speed = 70
-    if get_h_cord(zone) <= 110:
+    if get_h_angle(zone) <= 110:
         speed = speed * -1
-    elif get_h_cord(zone) <= 110 and speed == -70:
+    elif get_h_angle(zone) <= 110 and speed == -70:
         speed = speed * -1
         
-    horizontal_axis.run_target(get_h_cord(zone), speed, then=Stop.COAST)
-    vertical_axis.run_target(get_v_cord(zone), 70, then=Stop.COAST)
-    
+    horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
+    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.COAST)
+       
 
 def color_check():
-    """function tells the color"""
+    """Function that tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
     color = color_sensor.color()
     print(color)
@@ -124,23 +134,29 @@ def color_check():
 
 
 def drop_of_color_calibrate():
+    """Checks and saves colors (up to 3 colors)"""
     global drop_of_color_1
     global drop_of_color_2
     global drop_of_color_3
+   
     if drop_of_color_1 == None:
         drop_of_color_1 = color_check()
         wait(200)
+        
     elif (drop_of_color_1 != None and drop_of_color_2 == None and drop_of_color_3 == None):
         drop_of_color_2 = color_check()
         wait(200)
+        
     elif(drop_of_color_1 != None and drop_of_color_2 != None and drop_of_color_3 == None):
         drop_of_color_3 = color_check()
         wait(200)
+        
     else:
         print("All colors calibratet")
 
 
 def movement_menu():
+    """Handles the movement menu"""
     menu_movement = """
     L. Left
     U. Up
@@ -157,6 +173,7 @@ def movement_menu():
             run = False
             
 def zone_menu():
+    """Handles the zone menu"""
     menu_zone = """
     L. 
     U. Create Zone
@@ -180,6 +197,7 @@ def zone_menu():
         
 
 def go_to_zone_menu():
+    """Handles the go to zone choice menu"""
     menu_zone_choice = """
     L. Zone 1
     U. Zone 2
@@ -212,6 +230,7 @@ def go_to_zone_menu():
 
 
 def color_menu():
+    """Handles the color menu"""
     menu_color = """
     L. Left
     U. Up
@@ -227,6 +246,7 @@ def color_menu():
 
 
 def interface():
+    """Handles the interface"""
     menu_1 = """
     L. Zone Menu
     U. Color Menu
