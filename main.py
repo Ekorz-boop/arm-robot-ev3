@@ -91,8 +91,9 @@ def create_zone():
             
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
-    horizontal_axis.run_target(zone_dict.get(zone[0]), 70, then=Stop.COAST)
-    vertical_axis.run_target(zone_dict.get(zone[1]), 70, then=Stop.COAST)
+    print(zone_dict)
+    horizontal_axis.run_target(zone_dict.get(zone)[0], 70, then=Stop.COAST)
+    vertical_axis.run_target(zone_dict.get(zone)[1], 70, then=Stop.COAST)
         
 
 def color_check():
@@ -156,8 +157,10 @@ def zone_menu():
         print(menu_zone)
         if Button.UP in pressed:
             create_zone()
+            wait(500)
         elif Button.DOWN in pressed:
             print(menu_zone_choice)
+            wait(1000)
             if Button.LEFT in pressed:
                 zone = "1"
                 go_to_zone(zone)
