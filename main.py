@@ -7,6 +7,7 @@ from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
+import os
 
 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
@@ -32,6 +33,9 @@ vertical_axis.reset_angle(0)
 
 color_sensor = ColorSensor(Port.S2)
 
+zone_dict = {}
+current_zone_num = 0
+
 # Write your program here.
 def pick_up():
     """Function that makes the claw grip and move upward (picking up)"""
@@ -56,9 +60,8 @@ def check_location():
         print("Item")
         return True
 
-def free_control():
+def free_control(pressed):
     """Function for controlling the arm free form"""
-    pressed = ev3.buttons.pressed()
     if Button.LEFT in pressed:
         horizontal_axis.run(-45)
     elif Button.RIGHT in pressed:
@@ -66,19 +69,26 @@ def free_control():
     elif Button.UP in pressed:
         drop_of_color_calibrate()
     else:
-        horizontal_axis.run(0)
+        horizontal_axis.stop()
         
-def create_zone():
+def create_zone(pressed):
     """Function for creating zones at a designated position and saving it in the zone dictionary"""
-    pressed = ev3.buttons.pressed()
-    current_zone_num = 0
-    if Button.BEACON in pressed:
-        current_angle = horizontal_axis.angle()
+    global current_zone_num
+    if Button.UP in pressed:
+        current_h_angle = horizontal_axis.angle()
+        current_v_angle = vertical_axis.angle()
         current_zone_num += 1
-        zone_dict[f"zone {current_zone_num}"] = current_angle
+        angle_tuple = (current_h_angle, current_v_angle)
+        zone_dict[current_zone_num] = angle_tuple
         if current_zone_num >= 4:
             current_zone_num = 0
-
+        wait(200)
+        
+            
+def go_to_zone(zone):
+    """Function that turns the arnm to the desigated zone"""
+    horizontal_axis.run_target(zone_dict.get(zone[0]), 70, then=Stop.COAST)
+    vertical_axis.run_target(zone_dict.get(zone[1]), 70, then=Stop.COAST)
         
 def color_check():
     """function tells the color"""
@@ -110,15 +120,206 @@ def start_sorting():
     global drop_of_color_3
     
 
+def interface():
+    menu_layer_1 = """
+    L. Zone Menu
+    U. Color Menu
+    R. 
+    D.
+    """
+    menu_zone = """
+    L. Move Left
+    U. Create Zone
+    R. Move Right
+    D. Go to Zone
+    """
+    menu_color = """
+    L.
+    U.
+    R.
+    D.
+    """
+    menu_zones = """
+    Choose which zone to go to
+    L. Zone 1
+    U. Zone 2
+    R. Zone 3
+    D. Zone 4
+    """
+    current_menu = menu_layer_1
+    run = True
+    while run:
+        pressed = ev3.buttons.pressed()
+        #print(current_menu)
+        if current_menu == menu_layer_1:
+            if Button.LEFT in pressed:
+                current_menu = menu_zone
+                
+            elif Button.UP in pressed:
+                current_menu = menu_color
+                
+        
+        elif current_menu == menu_zone:
+            zone = 1
+            if Button.LEFT in pressed:
+                print(pressed)
+                free_control(pressed)
+                
+                
+            elif Button.UP in pressed:
+                create_zone(pressed)
+                
+                
+            elif Button.RIGHT in pressed:
+                print(pressed)
+                free_control(pressed)
+                
+                
+            elif Button.DOWN in pressed:
+                print(menu_zones)
+                
+                if Button.LEFT in pressed:
+                    zone = 1
+                    go_to_zone(zone)
+                    
+                
+                elif Button.UP in pressed:
+                    zone = 2
+                    go_to_zone(zone)
+                    
+                    
+                elif Button.RIGHT in pressed:
+                    zone = 3
+                    go_to_zone(zone)
+                    
+                    
+                elif Button.DOWN in pressed:
+                    zone = 4
+                    go_to_zone(zone)
+                    
+            
+            
+        elif current_menu == menu_color:
+            if Button.LEFT in pressed:
+                pass
+            elif Button.UP in pressed:
+                pass
+            elif Button.RIGHT in pressed:
+                pass
+            elif Button.DOWN in pressed:
+                pass
+            
+        elif Button.CENTER in pressed:
+            current_menu = menu_layer_1
+            wait(150)
+        
+                
+        
+
+def interface():
+    menu_layer_1 = """
+    L. Zone Menu
+    U. Color Menu
+    R. 
+    D.
+    """
+    menu_zone = """
+    L. Move Left
+    U. Create Zone
+    R. Move Right
+    D. Go to Zone
+    """
+    menu_color = """
+    L.
+    U.
+    R.
+    D.
+    """
+    menu_zones = """
+    Choose which zone to go to
+    L. Zone 1
+    U. Zone 2
+    R. Zone 3
+    D. Zone 4
+    """
+    current_menu = menu_layer_1
+    run = True
+    while run:
+        pressed = ev3.buttons.pressed()
+        #print(current_menu)
+        if current_menu == menu_layer_1:
+            if Button.LEFT in pressed:
+                current_menu = menu_zone
+                
+            elif Button.UP in pressed:
+                current_menu = menu_color
+                
+        
+        elif current_menu == menu_zone:
+            zone = 1
+            if Button.LEFT in pressed:
+                print(pressed)
+                free_control(pressed)
+                
+                
+            elif Button.UP in pressed:
+                create_zone(pressed)
+                
+                
+            elif Button.RIGHT in pressed:
+                print(pressed)
+                free_control(pressed)
+                
+                
+            elif Button.DOWN in pressed:
+                print(menu_zones)
+                
+                if Button.LEFT in pressed:
+                    zone = 1
+                    go_to_zone(zone)
+                    
+                
+                elif Button.UP in pressed:
+                    zone = 2
+                    go_to_zone(zone)
+                    
+                    
+                elif Button.RIGHT in pressed:
+                    zone = 3
+                    go_to_zone(zone)
+                    
+                    
+                elif Button.DOWN in pressed:
+                    zone = 4
+                    go_to_zone(zone)
+                    
+            
+            
+        elif current_menu == menu_color:
+            if Button.LEFT in pressed:
+                pass
+            elif Button.UP in pressed:
+                pass
+            elif Button.RIGHT in pressed:
+                pass
+            elif Button.DOWN in pressed:
+                pass
+            
+        elif Button.CENTER in pressed:
+            current_menu = menu_layer_1
+            wait(150)
+        
+                
+        
+
 def main():
-    # Item = False
-    # Item = check_location()
+    # item = False
+    # item = check_location()
     # if check_location():
     #     pick_up()
     #     drop()
-    while True:
-        free_control()
-
+    #interface()
+    pass
 
 if __name__ == "__main__":
-    main()
+    interface()
