@@ -41,10 +41,10 @@ current_zone_num = 0
 drop_of_color_1 = None
 drop_of_color_2 = None
 drop_of_color_3 = None
-c_blue = Color.rgb(Color.BLUE)
-c_red = Color.rgb(Color.RED)
-c_yellow = Color.rgb(Color.YELLOW)
-c_green = Color.rgb(Color.GREEN)
+c_blue = (2,5,30)
+c_red = (15,3,2)
+c_yellow = (15,10,2)
+c_green = (2,10,10)
 all_colors = [c_blue, c_red, c_yellow, c_green]
 
 # Write your program here.
@@ -443,7 +443,7 @@ def interface():
             
         elif Button.UP in pressed:
             wait(500)
-            color_menu()
+            
             
         elif Button.DOWN in pressed:
             wait(500)
