@@ -204,7 +204,7 @@ def drop_of_color_calibrate():
     else:
         print("All colors calibratet")
 
-
+#Make each menu have a different have displayed and have them be global values. This is because the menu functions get called continously in the for loop.
 def movement_menu():
     """Handles the movement menu"""
     menu_movement = """
