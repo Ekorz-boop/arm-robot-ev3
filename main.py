@@ -148,15 +148,15 @@ def pickup_from_start():
     global start
     zone = start
     go_to_zone(zone)
-    check_location()
-    pick_up()
+    if check_location():
+        pick_up()
+    
 
 
 def color_check():
     """Function that tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
-    color = color_sensor.color()
-    print(color)
+    color = color_sensor.rgb()
     return color
 
 
@@ -203,7 +203,7 @@ def movement_menu():
 def zone_menu():
     """Handles the zone menu"""
     menu_zone = """
-    L. 
+    L. Save Start Zone
     U. Create Zone
     R. 
     D. Go to zone
@@ -213,13 +213,21 @@ def zone_menu():
         pressed = ev3.buttons.pressed()
         print(menu_zone)
         if Button.UP in pressed:
+            wait(500)
             create_zone()
             wait(500)
         elif Button.DOWN in pressed:
             wait(500)
             go_to_zone_menu()
-            
-        
+            wait(500)
+        elif Button.LEFT in pressed:
+            wait(500)
+            Set_starter_menu()
+            wait(500)
+        elif Button.RIGHT in pressed:
+            wait(500)
+            pickup_from_start()
+            wait(500)
         if Button.CENTER in pressed:
             run = False
         
@@ -260,10 +268,10 @@ def go_to_zone_menu():
 def color_menu():
     """Handles the color menu"""
     menu_color = """
-    L. Left
-    U. Up
-    R. Right
-    D. Down
+    L. ...
+    U. Get color
+    R. ...
+    D. ...
     """
     run = True
     while run:
@@ -271,6 +279,8 @@ def color_menu():
         pressed = ev3.buttons.pressed()
         if Button.CENTER in pressed:
             run = False
+        if Button.UP in pressed:
+            color_check()
             
 
 def color_zone_menu():
@@ -290,7 +300,8 @@ def color_zone_menu():
         
         if Button.CENTER in pressed:
             run = False
-            
+        
+        
 
 def color_match_menu():
     """Handles the color match menu"""
@@ -355,7 +366,37 @@ def color_match_menu_2(chosen_color):
         if Button.CENTER in pressed:
             run = False
 
-
+def Set_starter_menu():
+    """User chooses a starter location"""
+    set_starter_menu = """
+    Choose which zone to assign sterter position
+    L. Zone 1
+    U. Zone 2
+    R. Zone 3
+    D. Zone 4
+    """
+    run = True
+    while run:
+        print( set_starter_menu )
+        pressed = ev3.buttons.pressed()
+        
+        if Button.LEFT in pressed:
+            zone = '1'
+            set_pickup_zone(zone)
+            
+        elif Button.UP in pressed:
+            zone = '2'
+            set_pickup_zone(zone)
+            
+        elif Button.RIGHT in pressed:
+            zone = '3'
+            set_pickup_zone(zone)
+        elif Button.DOWN in pressed:
+            zone = '4'
+            set_pickup_zone(zone)
+        
+        if Button.CENTER in pressed:
+            run = False
 def interface():
     """Handles the interface"""
     menu_1 = """
@@ -370,16 +411,21 @@ def interface():
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
+            wait(500)
             zone_menu()
             
         elif Button.RIGHT in pressed:
+            wait(500)
             movement_menu()
             
         elif Button.UP in pressed:
+            wait(500)
             color_menu()
             
         elif Button.DOWN in pressed:
+            wait(500)
             color_zone_menu()
+            
             
         
 def main():
