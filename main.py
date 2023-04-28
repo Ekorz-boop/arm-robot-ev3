@@ -62,13 +62,12 @@ def drop():
 
 
 def check_location():
-    """Cheks if an item is at precent at a given locations and returns true"""
+    """Checks if an item is at precent at a given locations and returns true"""
     claw.run_until_stalled(20, then=Stop.HOLD, duty_limit=50)
-    
     if (claw.angle() > -10):
         print("No Item")
         return False
-    
+ 
     else:
         print("Item")
         return True
