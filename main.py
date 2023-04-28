@@ -133,7 +133,7 @@ def get_v_angle(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
-    vertical_axis.run_target(-120, 70, then=Stop.HOLD) 
+    vertical_axis.run_target(-90, 70, then=Stop.HOLD) 
     speed = 70
     if get_h_angle(zone) <= 0:
         speed = speed * -1
