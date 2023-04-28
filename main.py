@@ -8,7 +8,7 @@ from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 import os
-
+import math
 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
@@ -41,6 +41,11 @@ current_zone_num = 0
 drop_of_color_1 = None
 drop_of_color_2 = None
 drop_of_color_3 = None
+c_blue = Color.rgb(Color.BLUE)
+c_red = Color.rgb(Color.RED)
+c_yellow = Color.rgb(Color.YELLOW)
+c_green = Color.rgb(Color.GREEN)
+all_colors = [c_blue, c_red, c_yellow, c_green]
 
 # Write your program here.
 def pick_up():
@@ -51,19 +56,18 @@ def pick_up():
 
 def drop():
     """Function that gently puts the item down and drops it"""
-    vertical_axis.run_target(20, 70, then=Stop.HOLD)
+    vertical_axis.run_until_stalled(-100, then=Stop.HOLD, duty_limit=50)
     claw.run_target(20, -90)
     vertical_axis.run_target(40, 80, then=Stop.HOLD)
 
 
 def check_location():
-    """Cheks if an item is at precent at a given locations and returns true"""
+    """Checks if an item is at precent at a given locations and returns true"""
     claw.run_until_stalled(20, then=Stop.HOLD, duty_limit=50)
-    
     if (claw.angle() > -10):
         print("No Item")
         return False
-    
+ 
     else:
         print("Item")
         return True
@@ -129,7 +133,7 @@ def get_v_angle(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
-    vertical_axis.run_target(-120, 70, then=Stop.HOLD) 
+    vertical_axis.run_target(-90, 70, then=Stop.HOLD) 
     speed = 70
     if get_h_angle(zone) <= 0:
         speed = speed * -1
@@ -156,8 +160,27 @@ def pickup_from_start():
 def color_check():
     """Function that tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
-    color = color_sensor.rgb()
+    color = determine_color(color_sensor.rgb())
+    print(color)
     return color
+
+
+def euclidean_distance(test_color, color):
+    """Return the distance from chosen color and predetermined color"""
+    r1, g1, b1 = test_color
+    r2, g2, b2 = color
+    distance = math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2)
+    return distance
+
+
+def determine_color(test_color):
+    """Returns the color closest matching the input color"""
+    closest_match = (0, 0, 0)
+    for color in all_colors:
+        if euclidean_distance(test_color, color) < euclidean_distance(closest_match, color):
+            closest_match = color
+    
+    return closest_match
 
 
 def drop_of_color_calibrate():
@@ -199,7 +222,7 @@ def movement_menu():
         if Button.CENTER in pressed:
             run = False
 
-   
+
 def zone_menu():
     """Handles the zone menu"""
     menu_zone = """
