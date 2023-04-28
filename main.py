@@ -212,9 +212,12 @@ def movement_menu():
     R. Right
     D. Down
     """
+    have_displayed = False
     run = True
     while run:
-        print(menu_movement)
+        if not have_displayed:
+            print(menu_movement)
+            have_displayed = True
         pressed = ev3.buttons.pressed()
         free_control(pressed)
         
@@ -230,10 +233,13 @@ def zone_menu():
     R. 
     D. Go to zone
     """
+    have_displayed = False
     run = True
     while run:
+        if not have_displayed:
+            print(menu_zone)
+            have_displayed = True
         pressed = ev3.buttons.pressed()
-        print(menu_zone)
         if Button.UP in pressed:
             create_zone()
             wait(500)
@@ -254,11 +260,13 @@ def go_to_zone_menu():
     R. Zone 3
     D. Zone 4
     """
-    
+    have_displayed = False
     run = True
     while run:
+        if not have_displayed:
+            print(menu_zone_choice)
+            have_displayed = True
         pressed = ev3.buttons.pressed()
-        print(menu_zone_choice)
         if Button.LEFT in pressed:
             zone = "1"
             go_to_zone(zone)
@@ -287,9 +295,12 @@ def color_menu():
     R. Right
     D. Down
     """
+    have_displayed = False
     run = True
     while run:
-        print(menu_color)
+        if not have_displayed:
+            print(menu_color)
+            have_displayed = True
         pressed = ev3.buttons.pressed()
         if Button.CENTER in pressed:
             run = False
@@ -303,9 +314,12 @@ def color_zone_menu():
     R. 
     D. 
     """
+    have_displayed = False
     run = True
     while run:
-        print(menu_color_zone)
+        if not have_displayed:
+            print(menu_color_zone)
+            have_displayed = True
         pressed = ev3.buttons.pressed()
         if Button.UP in pressed:
             color_match_menu()
@@ -324,9 +338,12 @@ def color_match_menu():
     D.
     """.format(drop_of_color_1=drop_of_color_1, drop_of_color_2=drop_of_color_2, drop_of_color_3=drop_of_color_3)
     chosen_color = drop_of_color_1
+    have_displayed = False
     run = True
     while run:
-        print(menu_color_match)
+        if not have_displayed:
+            print(menu_color_match)
+            have_displayed = True
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
@@ -357,9 +374,12 @@ def color_match_menu_2(chosen_color):
     R. Zone 3
     D. Zone 4
     """
+    have_displayed = False
     run = True
     while run:
-        print(menu_color_match_2)
+        if not have_displayed:
+            print(menu_color_match_2)
+            have_displayed = True
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
@@ -386,9 +406,12 @@ def interface():
     R. Movement
     D. Bad functions
     """
+    have_displayed = False
     run = True
     while run:
-        print(menu_1)
+        if not have_displayed:
+            print(menu_1)
+            have_displayed = True
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
