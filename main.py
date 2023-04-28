@@ -56,7 +56,7 @@ def pick_up():
 
 def drop():
     """Function that gently puts the item down and drops it"""
-    vertical_axis.run_target(20, 70, then=Stop.HOLD)
+    vertical_axis.run_until_stalled(-100, then=Stop.HOLD, duty_limit=50)
     claw.run_target(20, -90)
     vertical_axis.run_target(40, 80, then=Stop.HOLD)
 
