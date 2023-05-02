@@ -71,7 +71,7 @@ def drop():
     """Function that gently puts the item down and drops it"""
     vertical_axis.run_until_stalled(-100, then=Stop.HOLD, duty_limit=50)
     claw.run_target(20, -90)
-    vertical_axis.run_target(40, 80, then=Stop.HOLD)
+    vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
 
 
 def check_location():
@@ -324,9 +324,9 @@ def go_to_zone_menu():
 def color_menu():
     """Handles the color menu"""
     menu_color = """
-    L. ...
+    L. pick up
     U. Get color
-    R. ...
+    R. Drop
     D. ...
     """
     global color_menu_HD
@@ -340,7 +340,10 @@ def color_menu():
             run = False
         if Button.UP in pressed:
             color_check()
-            
+        elif Button.LEFT in pressed:
+            pick_up()
+        elif Button.RIGHT in pressed:
+            drop()
 
 def color_zone_menu():
     """Handles the color zones menu"""
