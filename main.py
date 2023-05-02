@@ -9,8 +9,6 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 import os
 import math
-from skimage import color
-import numpy as np
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
 
@@ -44,7 +42,7 @@ drop_of_color_2 = None
 drop_of_color_3 = None
 c_blue = (2,2,25)
 c_red = (12,0,2)
-c_yellow = (30,15,10)
+c_yellow = (20,10,10)
 c_green = (2,4,7)
 all_colors = [c_blue, c_red, c_yellow, c_green]
 
@@ -558,4 +556,4 @@ def main():
 
 
 if __name__ == "__main__":
-    #main()
+    main()
