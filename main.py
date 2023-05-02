@@ -238,7 +238,7 @@ def movement_menu():
     R. Right
     D. Down
     """
-    movement_menu_HD
+    global movement_menu_HD
     run = True
     while run:
         if not movement_menu_HD:
