@@ -43,7 +43,7 @@ drop_of_color_2 = None
 drop_of_color_3 = None
 c_blue = (2,2,25)
 c_red = (12,0,2)
-c_yellow = (30,15,10)
+c_yellow = (20,10,10)
 c_green = (2,4,7)
 all_colors = [c_blue, c_red, c_yellow, c_green]
 
