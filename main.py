@@ -382,8 +382,8 @@ def color_zone_menu():
     menu_color_zone = """
     L. 
     U. Assign color to zone
-    R. Periodical check mode
-    D. Sorting mode
+    R. Periodical sorting mode
+    D. 
     """
     global color_zone_menu_HD
     set_starter_menu_HD = False
@@ -398,18 +398,11 @@ def color_zone_menu():
             color_match_menu()
         
         elif Button.RIGHT in pressed:
-            check_pickup_periodically(2000)
+            periodical_sorting_mode(2)  # I think it is seconds here
 
-        elif Button.DOWN in pressed:
-            
-        
         if Button.CENTER in pressed:
             run = False
             color_zone_menu_HD = False
-        
-        
-
-        
         
 
 def color_match_menu():
@@ -556,29 +549,46 @@ def interface():
             color_zone_menu()
 
 
-def check_pickup_periodically(interval):
-    """Periodically checks the pickup location for a new item and performs necessary actions."""
+# def check_pickup_periodically(interval):
+#     """Periodically checks the pickup location for a new item and performs necessary actions."""
+#     while True:
+#         global start
+#         go_to_zone(start)
+#         if check_location():
+#             print("Item at pickup location!")
+#             # Perform necessary actions here, e.g., pick up the item and sort it
+#             pickup_from_start()
+#             color = color_check()
+#             zone = color_dict[str(color)]
+#             go_to_zone(zone)
+#             drop()
+#         else:
+#             print("No item at pickup location.")
+#         time.sleep(interval)
+
+
+def periodical_sorting_mode(wait_time):
     while True:
         global start
         go_to_zone(start)
-        if check_location():
-            print("Item at pickup location!")
-            # Perform necessary actions here, e.g., pick up the item and sort it
-            pickup_from_start()
-            color = color_check()
-            zone = color_dict[str(color)]
-            go_to_zone(zone)
-            drop()
-        else:
-            print("No item at pickup location.")
-        time.sleep(interval)
+        while not check_location():
+            print("Waiting for an item at the pickup location...")
+            time.sleep(wait_time) 
 
+        print("Item at pickup location!")
+        # Perform necessary actions here, e.g., pick up the item and sort it
+        pickup_from_start()
+        color = color_check()
+        zone = color_zone_dict[str(color)]
+        go_to_zone(zone)
+        drop()
+            
 
 def main():
-    #Create the first zone, this zone will be the pickup zone
+    # Create the first zone, this zone will be the pickup zone
     create_zone()
 
-    # Run interface function
+    # Start the inerface
     interface()
 
 
