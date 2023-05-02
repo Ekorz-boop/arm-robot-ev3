@@ -368,7 +368,7 @@ def color_menu():
         
         if Button.CENTER in pressed:
             run = False
-            color_menu_HD = True
+            color_menu_HD = False
         
         if Button.UP in pressed:
             color_check()
@@ -400,6 +400,7 @@ def color_zone_menu():
         if Button.CENTER in pressed:
             run = False
             color_zone_menu_HD = False
+        
         if Button.RIGHT in pressed:
             check_pickup_periodically(2000)
         
@@ -567,13 +568,7 @@ def check_pickup_periodically(interval):
 
 
 def main():
-    # Assign colors to zones
-    assign_color((255, 0, 0), '1')  # Assign red to zone 1
-    assign_color((0, 255, 0), '2')  # Assign green to zone 2
-    assign_color((0, 0, 255), '3')  # Assign blue to zone 3
-
-    # Test sorting
-    pickup_from_start()
+    create_zone()
 
     # Interface
     interface()
