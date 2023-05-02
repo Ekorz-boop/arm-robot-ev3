@@ -568,7 +568,8 @@ def interface():
 
 
 def periodical_sorting_mode(wait_time):
-    while True:
+    run = True
+    while run:
         global start
         go_to_zone(start)
         while not check_location():
