@@ -35,7 +35,7 @@ color_sensor = ColorSensor(Port.S2)
 
 zone_dict = {} #Handles which zone have which angle coordinates
 color_zone_dict = {} #Handles which color have which zone
-start = None
+start = "1"
 current_zone_num = 0
 
 drop_of_color_1 = None
