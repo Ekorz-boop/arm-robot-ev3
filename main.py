@@ -133,14 +133,14 @@ def get_v_angle(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
-    vertical_axis.run_target(-90, 70, then=Stop.HOLD) 
+    vertical_axis.run_target(-90, 110, then=Stop.HOLD) 
     speed = 70
     if get_h_angle(zone) <= 0:
         speed = speed * -1
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
     horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
-    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
+    vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
 
 def set_pickup_zone(zone):
     """Sets the pickup zone to the start position"""
@@ -458,7 +458,7 @@ def interface():
     L. Zone Menu
     U. Color Menu
     R. Movement
-    D. Bad functions
+    D. Color Zone
     """
     have_displayed = False
     run = True
