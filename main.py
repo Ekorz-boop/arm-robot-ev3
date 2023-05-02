@@ -174,7 +174,7 @@ def color_check():
     """Function that tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
     color = determine_color(color_sensor.rgb())
-    print(color)
+    show_color(color)
     return color
 
 
@@ -195,6 +195,18 @@ def determine_color(test_color):
     
     return closest_match
 
+def show_color(color):
+    if color == c_blue:
+        text ="Blue"
+    elif color == c_green:
+        text="Green"
+    elif color == c_yellow:
+        text ="Yellow"
+    elif color == c_red:
+        text = "Red"
+    ev3.screen.clear()
+    ev3.screen.draw_text(0, 20, text, text_color=Color.BLACK, background_color=None)
+    wait(3000)
 
 def drop_of_color_calibrate():
     """Checks and saves colors (up to 3 colors)"""
