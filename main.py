@@ -47,6 +47,19 @@ c_yellow = (15,10,2)
 c_green = (2,10,10)
 all_colors = [c_blue, c_red, c_yellow, c_green]
 
+
+# Have display variables for all the menus. Makes sure the output doesn't spam the menu.
+# HD = Have Displayed
+interface_HD = False
+set_starter_menu_HD = False
+color_match_menu_2_HD = False
+color_match_menu_HD = False
+color_zone_menu_HD = False
+color_menu_HD = False
+go_to_zone_menu_HD = False
+zone_menu_HD = False
+movement_menu_HD = False
+
 # Write your program here.
 def pick_up():
     """Function that makes the claw grip and move upward (picking up)"""
@@ -58,7 +71,7 @@ def drop():
     """Function that gently puts the item down and drops it"""
     vertical_axis.run_until_stalled(-100, then=Stop.HOLD, duty_limit=50)
     claw.run_target(20, -90)
-    vertical_axis.run_target(40, 80, then=Stop.HOLD)
+    vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
 
 
 def check_location():
@@ -133,14 +146,14 @@ def get_v_angle(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
-    vertical_axis.run_target(-90, 70, then=Stop.HOLD) 
+    vertical_axis.run_target(-90, 110, then=Stop.HOLD) 
     speed = 70
     if get_h_angle(zone) <= 0:
         speed = speed * -1
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
     horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
-    vertical_axis.run_target(get_v_angle(zone), 70, then=Stop.HOLD) 
+    vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
 
 def set_pickup_zone(zone):
     """Sets the pickup zone to the start position"""
@@ -161,7 +174,7 @@ def color_check():
     """Function that tells the color"""
     vertical_axis.run_target(40, 95, then=Stop.HOLD)
     color = determine_color(color_sensor.rgb())
-    print(color)
+    show_color(color)
     return color
 
 
@@ -182,6 +195,18 @@ def determine_color(test_color):
     
     return closest_match
 
+def show_color(color):
+    if color == c_blue:
+        text ="Blue"
+    elif color == c_green:
+        text="Green"
+    elif color == c_yellow:
+        text ="Yellow"
+    elif color == c_red:
+        text = "Red"
+    ev3.screen.clear()
+    ev3.screen.draw_text(0, 20, text, text_color=Color.BLACK, background_color=None)
+    wait(3000)
 
 def drop_of_color_calibrate():
     """Checks and saves colors (up to 3 colors)"""
@@ -213,18 +238,18 @@ def movement_menu():
     R. Right
     D. Down
     """
-    have_displayed = False
+    global movement_menu_HD
     run = True
     while run:
-        if not have_displayed:
+        if not movement_menu_HD:
             print(menu_movement)
-            have_displayed = True
+            movement_menu_HD = True
         pressed = ev3.buttons.pressed()
         free_control(pressed)
         
         if Button.CENTER in pressed:
             run = False
-
+            movement_menu_HD = True
 
 def zone_menu():
     """Handles the zone menu"""
@@ -234,12 +259,12 @@ def zone_menu():
     R. 
     D. Go to zone
     """
-    have_displayed = False
+    global zone_menu_HD
     run = True
     while run:
-        if not have_displayed:
+        if not zone_menu_HD:
             print(menu_zone)
-            have_displayed = True
+            zone_menu_HD = True
         pressed = ev3.buttons.pressed()
         if Button.UP in pressed:
             wait(500)
@@ -259,7 +284,7 @@ def zone_menu():
             wait(500)
         if Button.CENTER in pressed:
             run = False
-        
+            zone_menu_HD = True
 
 def go_to_zone_menu():
     """Handles the go to zone choice menu"""
@@ -269,12 +294,12 @@ def go_to_zone_menu():
     R. Zone 3
     D. Zone 4
     """
-    have_displayed = False
+    global go_to_zone_menu_HD
     run = True
     while run:
-        if not have_displayed:
+        if not go_to_zone_menu_HD:
             print(menu_zone_choice)
-            have_displayed = True
+            go_to_zone_menu_HD = True
         pressed = ev3.buttons.pressed()
         if Button.LEFT in pressed:
             zone = "1"
@@ -294,28 +319,34 @@ def go_to_zone_menu():
             
         if Button.CENTER in pressed:
             run = False
-
+            go_to_zone_menu_HD = True
 
 def color_menu():
     """Handles the color menu"""
     menu_color = """
-    L. ...
+    L. pick up
     U. Get color
-    R. ...
+    R. Drop
     D. ...
     """
-    have_displayed = False
+    global color_menu_HD
     run = True
     while run:
-        if not have_displayed:
+        if not color_menu_HD:
             print(menu_color)
-            have_displayed = True
+            color_menu_HD = True
         pressed = ev3.buttons.pressed()
+        
         if Button.CENTER in pressed:
             run = False
+            color_menu_HD = True
+        
         if Button.UP in pressed:
             color_check()
-            
+        elif Button.LEFT in pressed:
+            pick_up()
+        elif Button.RIGHT in pressed:
+            drop()
 
 def color_zone_menu():
     """Handles the color zones menu"""
@@ -325,19 +356,20 @@ def color_zone_menu():
     R. 
     D. 
     """
-    have_displayed = False
+    global color_zone_menu_HD
     run = True
     while run:
-        if not have_displayed:
+        if not color_zone_menu_HD:
             print(menu_color_zone)
-            have_displayed = True
+            color_zone_menu_HD = True
         pressed = ev3.buttons.pressed()
+        
         if Button.UP in pressed:
             color_match_menu()
         
         if Button.CENTER in pressed:
             run = False
-        
+            color_zone_menu_HD = True
         
 
 def color_match_menu():
@@ -350,12 +382,12 @@ def color_match_menu():
     D.
     """.format(drop_of_color_1=drop_of_color_1, drop_of_color_2=drop_of_color_2, drop_of_color_3=drop_of_color_3)
     chosen_color = drop_of_color_1
-    have_displayed = False
+    global color_match_menu_HD
     run = True
     while run:
-        if not have_displayed:
+        if not color_match_menu_HD:
             print(menu_color_match)
-            have_displayed = True
+            color_match_menu_HD = True
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
@@ -375,6 +407,7 @@ def color_match_menu():
         
         if Button.CENTER in pressed:
             run = False
+            color_match_menu_HD = True
 
 
 def color_match_menu_2(chosen_color):
@@ -386,12 +419,12 @@ def color_match_menu_2(chosen_color):
     R. Zone 3
     D. Zone 4
     """
-    have_displayed = False
+    global color_match_menu_2_HD
     run = True
     while run:
-        if not have_displayed:
+        if not color_match_menu_2_HD:
             print(menu_color_match_2)
-            have_displayed = True
+            color_match_menu_2_HD = True
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
@@ -408,8 +441,9 @@ def color_match_menu_2(chosen_color):
         
         if Button.CENTER in pressed:
             run = False
+            color_match_menu_2_HD = True
 
-def Set_starter_menu():
+def set_starter_menu():
     """User chooses a starter location"""
     set_starter_menu = """
     Choose which zone to assign sterter position
@@ -418,9 +452,12 @@ def Set_starter_menu():
     R. Zone 3
     D. Zone 4
     """
+    global set_starter_menu_HD
     run = True
     while run:
-        print( set_starter_menu )
+        if not set_starter_menu_HD:
+            print(set_starter_menu)
+            set_starter_menu_HD = True
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
@@ -440,20 +477,23 @@ def Set_starter_menu():
         
         if Button.CENTER in pressed:
             run = False
+            set_starter_menu_HD = True
+            
+            
 def interface():
     """Handles the interface"""
     menu_1 = """
     L. Zone Menu
     U. Color Menu
     R. Movement
-    D. Bad functions
+    D. Color Zone
     """
-    have_displayed = False
+    global interface_HD
     run = True
     while run:
-        if not have_displayed:
+        if not interface_HD:
             print(menu_1)
-            have_displayed = True
+            interface_HD = True
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
@@ -466,7 +506,7 @@ def interface():
             
         elif Button.UP in pressed:
             wait(500)
-            
+            color_menu()
             
         elif Button.DOWN in pressed:
             wait(500)
