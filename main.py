@@ -181,67 +181,25 @@ def color_check():
     return color
 
 
-# def euclidean_distance(test_color, color):
-#     """Return the distance from chosen color and predetermined color"""
-#     r1, g1, b1 = test_color
-#     r2, g2, b2 = color
-#     distance = math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2)
-#     return distance
+def euclidean_distance(test_color, color):
+    """Return the distance from chosen color and predetermined color"""
+    r1, g1, b1 = test_color
+    r2, g2, b2 = color
+    distance = math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2)
+    return distance
 
-
-# def determine_color(test_color):
-#     """Returns the color closest matching the input color"""
-#     closest_match = (0, 0, 0)
-#     for color in all_colors:
-#         if euclidean_distance(test_color, color) < euclidean_distance(closest_match, color):
-#             closest_match = color
-    
-#     return closest_match
-
-
-def rgb2lab(inputColor):
-    """Converts RGB color to LAB color space"""
-    num = 0
-    RGB = [0, 0, 0]
-
-    for value in inputColor:
-        value = float(value) / 255
-
-        if value > 0.04045:
-            value = ((value + 0.055) / 1.055) ** 2.4
-        else:
-            value = value / 12.92
-
-        RGB[num] = value * 100
-        num = num + 1
-
-    XYZ = [0, 0, 0,]
-
-    X = RGB[0] * 0.4124 + RGB[1] * 0.3576 + RGB[2] * 0.1805
-    Y = RGB[0] * 0.2126 + RGB[1] * 0.7152 + RGB[2] * 0.0722
-    Z = RGB[0] * 0.0193 + RGB[1] * 0.1192 + RGB[2] * 0.9505
-    XYZ[0] = round(X, 4)
-    XYZ[1] = round(Y, 4)
-    XYZ[2] = round(Z, 4)
-
-    return color.xyz2lab(np.array([XYZ]))
-
-def deltaE_cie76(lab1, lab2):
-    """Calculates the Delta E (CIE76) between two LAB colors"""
-    return np.sqrt(np.sum((lab1 - lab2) ** 2))
 
 def determine_color(test_color):
-    """Returns the color closest matching the input color"""
-    closest_match = (0, 0, 0)
-    min_delta_e = float('inf')
-    test_color_lab = rgb2lab(test_color)
+    """Returns the color closest matching the input color using Euclidean distance in the RGB color space"""
+    global c_red, c_blue, c_green, c_yellow
+    all_colors = [c_red, c_blue, c_green, c_yellow]
+    closest_match = all_colors[0]
+    min_distance = euclidean_distance(test_color, closest_match)
 
-    for color in all_colors:
-        color_lab = rgb2lab(color)
-        delta_e = deltaE_cie76(test_color_lab, color_lab)
-
-        if delta_e < min_delta_e:
-            min_delta_e = delta_e
+    for color in all_colors[1:]:
+        distance = euclidean_distance(test_color, color)
+        if distance < min_distance:
+            min_distance = distance
             closest_match = color
 
     return closest_match
@@ -598,8 +556,6 @@ def main():
     #interface()
     interface()
 
-def color_dic():
-    color_commands = {}
-    return color_commands
+
 if __name__ == "__main__":
     #main()
