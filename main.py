@@ -35,7 +35,7 @@ color_sensor = ColorSensor(Port.S2)
 
 zone_dict = {} #Handles which zone have which angle coordinates
 color_zone_dict = {} #Handles which color have which zone
-start = None
+start = '1'
 current_zone_num = 0
 
 drop_of_color_1 = None
@@ -124,7 +124,7 @@ def create_zone():
 def assign_color(color, zone):
     """Assigns a color to a zone."""
     color_zone_dict[zone] = color
-    print(f"Assigned color {color} to zone {zone}.")
+    #print(f"Assigned color {color} to zone {zone}.")
 
 
 def get_h_angle(zone):
@@ -547,6 +547,7 @@ def interface():
 def check_pickup_periodically(interval):
     """Periodically checks the pickup location for a new item and performs necessary actions."""
     while True:
+        global start
         go_to_zone(start)
         if check_location():
             print("Item at pickup location!")
@@ -562,13 +563,7 @@ def check_pickup_periodically(interval):
 
 
 def main():
-    # Assign colors to zones
-    assign_color((255, 0, 0), '1')  # Assign red to zone 1
-    assign_color((0, 255, 0), '2')  # Assign green to zone 2
-    assign_color((0, 0, 255), '3')  # Assign blue to zone 3
-
-    # Test sorting
-    pickup_from_start()
+    create_zone()
 
     # Interface
     interface()
