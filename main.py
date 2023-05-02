@@ -249,7 +249,7 @@ def movement_menu():
         
         if Button.CENTER in pressed:
             run = False
-
+            movement_menu_HD = True
 
 def zone_menu():
     """Handles the zone menu"""
@@ -284,7 +284,7 @@ def zone_menu():
             wait(500)
         if Button.CENTER in pressed:
             run = False
-        
+            zone_menu_HD = True
 
 def go_to_zone_menu():
     """Handles the go to zone choice menu"""
@@ -319,7 +319,7 @@ def go_to_zone_menu():
             
         if Button.CENTER in pressed:
             run = False
-
+            go_to_zone_menu_HD = True
 
 def color_menu():
     """Handles the color menu"""
@@ -336,8 +336,11 @@ def color_menu():
             print(menu_color)
             color_menu_HD = True
         pressed = ev3.buttons.pressed()
+        
         if Button.CENTER in pressed:
             run = False
+            color_menu_HD = True
+        
         if Button.UP in pressed:
             color_check()
             
@@ -357,12 +360,13 @@ def color_zone_menu():
             print(menu_color_zone)
             color_zone_menu_HD = True
         pressed = ev3.buttons.pressed()
+        
         if Button.UP in pressed:
             color_match_menu()
         
         if Button.CENTER in pressed:
             run = False
-        
+            color_zone_menu_HD = True
         
 
 def color_match_menu():
@@ -400,6 +404,7 @@ def color_match_menu():
         
         if Button.CENTER in pressed:
             run = False
+            color_match_menu_HD = True
 
 
 def color_match_menu_2(chosen_color):
@@ -433,6 +438,7 @@ def color_match_menu_2(chosen_color):
         
         if Button.CENTER in pressed:
             run = False
+            color_match_menu_2_HD = True
 
 def set_starter_menu():
     """User chooses a starter location"""
@@ -468,6 +474,7 @@ def set_starter_menu():
         
         if Button.CENTER in pressed:
             run = False
+            set_starter_menu_HD = True
             
             
 def interface():
