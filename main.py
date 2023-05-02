@@ -496,7 +496,7 @@ def interface():
             
         elif Button.UP in pressed:
             wait(500)
-            
+            color_menu()
             
         elif Button.DOWN in pressed:
             wait(500)
