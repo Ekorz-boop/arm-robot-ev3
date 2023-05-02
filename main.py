@@ -9,7 +9,6 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 import os
 import math
-from skimage import color
 import numpy as np
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
