@@ -35,7 +35,7 @@ color_sensor = ColorSensor(Port.S2)
 
 zone_dict = {} #Handles which zone have which angle coordinates
 color_dict = {} #Handles which color have which zone
-start = None
+start = '1'
 current_zone_num = 0
 
 drop_of_color_1 = None
@@ -288,7 +288,7 @@ def zone_menu():
             wait(500)
         elif Button.LEFT in pressed:
             wait(500)
-            Set_starter_menu()
+            set_starter_menu()
             wait(500)
         elif Button.RIGHT in pressed:
             wait(500)
@@ -370,7 +370,7 @@ def color_zone_menu():
     menu_color_zone = """
     L. 
     U. Assign color to zone
-    R. 
+    R. sak
     D. 
     """
     global color_zone_menu_HD
@@ -388,6 +388,8 @@ def color_zone_menu():
         if Button.CENTER in pressed:
             run = False
             color_zone_menu_HD = False
+        if Button.RIGHT in pressed:
+            check_pickup_periodically(2000)
         
 
 def color_match_menu():
