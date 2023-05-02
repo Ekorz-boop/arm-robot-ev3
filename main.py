@@ -382,8 +382,8 @@ def color_zone_menu():
     menu_color_zone = """
     L. 
     U. Assign color to zone
-    R. sak
-    D. 
+    R. Periodical check mode
+    D. Sorting mode
     """
     global color_zone_menu_HD
     set_starter_menu_HD = False
@@ -397,12 +397,19 @@ def color_zone_menu():
         if Button.UP in pressed:
             color_match_menu()
         
+        elif Button.RIGHT in pressed:
+            check_pickup_periodically(2000)
+
+        elif Button.DOWN in pressed:
+            
+        
         if Button.CENTER in pressed:
             run = False
             color_zone_menu_HD = False
         
-        if Button.RIGHT in pressed:
-            check_pickup_periodically(2000)
+        
+
+        
         
 
 def color_match_menu():
@@ -568,9 +575,10 @@ def check_pickup_periodically(interval):
 
 
 def main():
+    #Create the first zone, this zone will be the pickup zone
     create_zone()
 
-    # Interface
+    # Run interface function
     interface()
 
 
