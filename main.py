@@ -42,10 +42,10 @@ current_zone_num = 0
 drop_of_color_1 = None
 drop_of_color_2 = None
 drop_of_color_3 = None
-c_blue = (2,5,30)
-c_red = (15,3,2)
-c_yellow = (15,10,2)
-c_green = (2,10,10)
+c_blue = (2,2,25)
+c_red = (12,0,2)
+c_yellow = (30,15,10)
+c_green = (2,4,7)
 all_colors = [c_blue, c_red, c_yellow, c_green]
 
 
@@ -173,8 +173,10 @@ def pickup_from_start():
 
 def color_check():
     """Function that tells the color"""
-    vertical_axis.run_target(40, 95, then=Stop.HOLD)
+    vertical_axis.run_target(40, 90, then=Stop.HOLD)
     color = determine_color(color_sensor.rgb())
+    print(color_sensor.rgb())
+    print(color)
     show_color(color)
     return color
 
@@ -256,7 +258,8 @@ def show_color(color):
         text = "Red"
     ev3.screen.clear()
     ev3.screen.draw_text(0, 20, text, text_color=Color.BLACK, background_color=None)
-    wait(3000)
+    wait(4000)
+    ev3.screen.clear()
 
 def drop_of_color_calibrate():
     """Checks and saves colors (up to 3 colors)"""
@@ -289,6 +292,7 @@ def movement_menu():
     D. Down
     """
     global movement_menu_HD
+    set_starter_menu_HD = False
     run = True
     while run:
         if not movement_menu_HD:
@@ -310,6 +314,7 @@ def zone_menu():
     D. Go to zone
     """
     global zone_menu_HD
+    set_starter_menu_HD = False
     run = True
     while run:
         if not zone_menu_HD:
@@ -345,6 +350,7 @@ def go_to_zone_menu():
     D. Zone 4
     """
     global go_to_zone_menu_HD
+    set_starter_menu_HD = False
     run = True
     while run:
         if not go_to_zone_menu_HD:
@@ -411,6 +417,7 @@ def color_zone_menu():
     D. 
     """
     global color_zone_menu_HD
+    set_starter_menu_HD = False
     run = True
     while run:
         if not color_zone_menu_HD:
@@ -437,6 +444,7 @@ def color_match_menu():
     """.format(drop_of_color_1=drop_of_color_1, drop_of_color_2=drop_of_color_2, drop_of_color_3=drop_of_color_3)
     chosen_color = drop_of_color_1
     global color_match_menu_HD
+    set_starter_menu_HD = False
     run = True
     while run:
         if not color_match_menu_HD:
@@ -474,6 +482,7 @@ def color_match_menu_2(chosen_color):
     D. Zone 4
     """
     global color_match_menu_2_HD
+    set_starter_menu_HD = False
     run = True
     while run:
         if not color_match_menu_2_HD:
@@ -507,6 +516,7 @@ def set_starter_menu():
     D. Zone 4
     """
     global set_starter_menu_HD
+    set_starter_menu_HD = False
     run = True
     while run:
         if not set_starter_menu_HD:
@@ -588,6 +598,8 @@ def main():
     #interface()
     interface()
 
-
+def color_dic():
+    color_commands = {}
+    return color_commands
 if __name__ == "__main__":
-    main()
+    #main()
