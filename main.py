@@ -9,7 +9,8 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 import os
 import math
-
+from skimage import color
+import numpy as np
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
 
@@ -160,14 +161,14 @@ def set_pickup_zone(zone):
     global start
     start = zone
 
+
 def pickup_from_start():
     """Pick up block from the starting position"""
     global start
     zone = start
     go_to_zone(zone)
     if check_location():
-        pick_up()
-    
+        pick_up() 
 
 
 def color_check():
@@ -178,22 +179,71 @@ def color_check():
     return color
 
 
-def euclidean_distance(test_color, color):
-    """Return the distance from chosen color and predetermined color"""
-    r1, g1, b1 = test_color
-    r2, g2, b2 = color
-    distance = math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2)
-    return distance
+# def euclidean_distance(test_color, color):
+#     """Return the distance from chosen color and predetermined color"""
+#     r1, g1, b1 = test_color
+#     r2, g2, b2 = color
+#     distance = math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2)
+#     return distance
 
+
+# def determine_color(test_color):
+#     """Returns the color closest matching the input color"""
+#     closest_match = (0, 0, 0)
+#     for color in all_colors:
+#         if euclidean_distance(test_color, color) < euclidean_distance(closest_match, color):
+#             closest_match = color
+    
+#     return closest_match
+
+
+def rgb2lab(inputColor):
+    """Converts RGB color to LAB color space"""
+    num = 0
+    RGB = [0, 0, 0]
+
+    for value in inputColor:
+        value = float(value) / 255
+
+        if value > 0.04045:
+            value = ((value + 0.055) / 1.055) ** 2.4
+        else:
+            value = value / 12.92
+
+        RGB[num] = value * 100
+        num = num + 1
+
+    XYZ = [0, 0, 0,]
+
+    X = RGB[0] * 0.4124 + RGB[1] * 0.3576 + RGB[2] * 0.1805
+    Y = RGB[0] * 0.2126 + RGB[1] * 0.7152 + RGB[2] * 0.0722
+    Z = RGB[0] * 0.0193 + RGB[1] * 0.1192 + RGB[2] * 0.9505
+    XYZ[0] = round(X, 4)
+    XYZ[1] = round(Y, 4)
+    XYZ[2] = round(Z, 4)
+
+    return color.xyz2lab(np.array([XYZ]))
+
+def deltaE_cie76(lab1, lab2):
+    """Calculates the Delta E (CIE76) between two LAB colors"""
+    return np.sqrt(np.sum((lab1 - lab2) ** 2))
 
 def determine_color(test_color):
     """Returns the color closest matching the input color"""
     closest_match = (0, 0, 0)
+    min_delta_e = float('inf')
+    test_color_lab = rgb2lab(test_color)
+
     for color in all_colors:
-        if euclidean_distance(test_color, color) < euclidean_distance(closest_match, color):
+        color_lab = rgb2lab(color)
+        delta_e = deltaE_cie76(test_color_lab, color_lab)
+
+        if delta_e < min_delta_e:
+            min_delta_e = delta_e
             closest_match = color
-    
+
     return closest_match
+
 
 def show_color(color):
     if color == c_blue:
@@ -249,7 +299,7 @@ def movement_menu():
         
         if Button.CENTER in pressed:
             run = False
-            movement_menu_HD = True
+            movement_menu_HD = False
 
 def zone_menu():
     """Handles the zone menu"""
@@ -284,7 +334,7 @@ def zone_menu():
             wait(500)
         if Button.CENTER in pressed:
             run = False
-            zone_menu_HD = True
+            zone_menu_HD = False
 
 def go_to_zone_menu():
     """Handles the go to zone choice menu"""
@@ -304,22 +354,26 @@ def go_to_zone_menu():
         if Button.LEFT in pressed:
             zone = "1"
             go_to_zone(zone)
+            wait(500)
                     
         elif Button.UP in pressed:
             zone = "2"
             go_to_zone(zone)
+            wait(500)
             
         elif Button.RIGHT in pressed:
             zone = "3"
             go_to_zone(zone)
+            wait(500)
             
         elif Button.DOWN in pressed:
             zone = "4"
             go_to_zone(zone)
+            wait(500)
             
         if Button.CENTER in pressed:
             run = False
-            go_to_zone_menu_HD = True
+            go_to_zone_menu_HD = False
 
 def color_menu():
     """Handles the color menu"""
@@ -369,7 +423,7 @@ def color_zone_menu():
         
         if Button.CENTER in pressed:
             run = False
-            color_zone_menu_HD = True
+            color_zone_menu_HD = False
         
 
 def color_match_menu():
@@ -407,7 +461,7 @@ def color_match_menu():
         
         if Button.CENTER in pressed:
             run = False
-            color_match_menu_HD = True
+            color_match_menu_HD = False
 
 
 def color_match_menu_2(chosen_color):
@@ -441,7 +495,7 @@ def color_match_menu_2(chosen_color):
         
         if Button.CENTER in pressed:
             run = False
-            color_match_menu_2_HD = True
+            color_match_menu_2_HD = False
 
 def set_starter_menu():
     """User chooses a starter location"""
@@ -477,7 +531,7 @@ def set_starter_menu():
         
         if Button.CENTER in pressed:
             run = False
-            set_starter_menu_HD = True
+            set_starter_menu_HD = False
             
             
 def interface():
@@ -511,9 +565,19 @@ def interface():
         elif Button.DOWN in pressed:
             wait(500)
             color_zone_menu()
-            
-            
+
+
+def pickup_loop(zone):
+    run = True
+    while run:
         
+        if check_location():
+            print("Item at pickup location!")
+        else:
+            vertical_axis.run_target(20, 120, then=Stop.HOLD)
+            wait(1000)
+            vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
+
 def main():
     """Main function"""
     # item = False
