@@ -9,6 +9,7 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 import os
 import math
+import time
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
 
@@ -533,16 +534,22 @@ def interface():
             color_zone_menu()
 
 
-def pickup_loop(zone):
-    run = True
-    while run:
-        
+def check_pickup_periodically(interval):
+    """Periodically checks the pickup location for a new item and performs necessary actions."""
+    while True:
+        go_to_zone(start)
         if check_location():
             print("Item at pickup location!")
+            # Perform necessary actions here, e.g., pick up the item and sort it
+            pickup_from_start()
+            color = color_check()
+            zone = color_dict[str(color)]
+            go_to_zone(zone)
+            drop()
         else:
-            vertical_axis.run_target(20, 120, then=Stop.HOLD)
-            wait(1000)
-            vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
+            print("No item at pickup location.")
+        time.sleep(interval)
+
 
 def main():
     """Main function"""
