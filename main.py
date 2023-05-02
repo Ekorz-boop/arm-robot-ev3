@@ -484,6 +484,8 @@ def main():
     #interface()
     interface()
 
-
+def color_dic():
+    color_commands = {}
+    return color_commands
 if __name__ == "__main__":
-    main()
+    #main()
