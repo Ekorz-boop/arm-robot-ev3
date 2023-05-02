@@ -124,7 +124,7 @@ def create_zone():
 def assign_color(color, zone):
     """Assigns a color to a zone."""
     color_zone_dict[zone] = color
-    print(f"Assigned color {color} to zone {zone}.")
+   
 
 
 def get_h_angle(zone):
@@ -146,13 +146,17 @@ def get_v_angle(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
+    if zone not in zone_dict:
+        print("Zone not found in zone_dict")
+        return
+
     vertical_axis.run_target(-90, 110, then=Stop.HOLD) 
     speed = 70
     if get_h_angle(zone) <= 0:
         speed = speed * -1
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
-    horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
+    horizontal_axis.run_target(speed, get_h_angle(zone), then=Stop.COAST)
     vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
 
 def set_pickup_zone(zone):
@@ -562,14 +566,8 @@ def check_pickup_periodically(interval):
 
 
 def main():
-    # Assign colors to zones
-    assign_color((255, 0, 0), '1')  # Assign red to zone 1
-    assign_color((0, 255, 0), '2')  # Assign green to zone 2
-    assign_color((0, 0, 255), '3')  # Assign blue to zone 3
-
-    # Test sorting
-    pickup_from_start()
-
+    create_zone()
+    
     # Interface
     interface()
 
