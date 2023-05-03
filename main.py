@@ -131,7 +131,7 @@ def create_zone():
     
 def assign_color(color, zone):
     """Assigns a color to a zone."""
-    color_zone_dict[zone] = color
+    color_zone_dict[color] = zone
    
 
 
