@@ -380,10 +380,15 @@ def color_menu():
             color_menu_HD = False
         
         if Button.UP in pressed:
+            wait(500)
             color_check()
+            
         elif Button.LEFT in pressed:
+            wait(500)
             pick_up()
+            
         elif Button.RIGHT in pressed:
+            wait(500)
             drop()
 
 def color_zone_menu():
@@ -406,6 +411,7 @@ def color_zone_menu():
         if Button.UP in pressed:
             wait(500)
             color_match_menu()
+            wait(500)
         
         elif Button.RIGHT in pressed:
             wait(500)
@@ -484,18 +490,22 @@ def color_match_menu_2(chosen_color):
         if Button.LEFT in pressed:
             wait(500)
             assign_color(chosen_color, "1")
+            wait(500)
             
         elif Button.UP in pressed:
             wait(500)
             assign_color(chosen_color, "2")
+            wait(500)
             
         elif Button.RIGHT in pressed:
             wait(500)
             assign_color(chosen_color, "3")
+            wait(500)
             
         elif Button.DOWN in pressed:
             wait(500)
             assign_color(chosen_color, "4")
+            wait(500)
         
         if Button.CENTER in pressed:
             run = False
@@ -522,17 +532,22 @@ def set_starter_menu():
         if Button.LEFT in pressed:
             zone = '1'
             set_pickup_zone(zone)
+            wait(500)
             
         elif Button.UP in pressed:
             zone = '2'
             set_pickup_zone(zone)
+            wait(500)
             
         elif Button.RIGHT in pressed:
             zone = '3'
             set_pickup_zone(zone)
+            wait(500)
+            
         elif Button.DOWN in pressed:
             zone = '4'
             set_pickup_zone(zone)
+            wait(500)
         
         if Button.CENTER in pressed:
             run = False
