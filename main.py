@@ -68,10 +68,10 @@ def pick_up():
     vertical_axis.run_target(20, 120, then=Stop.HOLD)
 
 
-def go_up_and_open():
+def open_claw():
     """Function that makes the claw grip and move upward (picking up)"""
     claw.run_until_stalled(100, then=Stop.HOLD, duty_limit=50)
-    vertical_axis.run_target(20, 120, then=Stop.HOLD)
+    
 
 
 def drop():
@@ -86,6 +86,7 @@ def check_location():
     claw.run_until_stalled(20, then=Stop.HOLD, duty_limit=50)
     if (claw.angle() > -10):
         print("No Item")
+        claw.run_until_stalled(-20, then=Stop.HOLD, duty_limit=50)
         return False
  
     else:
@@ -402,9 +403,11 @@ def color_zone_menu():
         pressed = ev3.buttons.pressed()
         
         if Button.UP in pressed:
+            wait(500)
             color_match_menu()
         
         elif Button.RIGHT in pressed:
+            wait(500)
             periodical_sorting_mode(2)  # I think it is seconds here
 
         if Button.CENTER in pressed:
@@ -434,21 +437,25 @@ def color_match_menu():
         if Button.LEFT in pressed:
             wait(500)
             color_match_menu_2(chosen_color)
+            wait(500)
             
         elif Button.UP in pressed:
             wait(500)
             chosen_color = drop_of_color_2
             color_match_menu_2(chosen_color)
+            wait(500)
             
         elif Button.RIGHT in pressed:
             wait(500)
             chosen_color = drop_of_color_3
             color_match_menu_2(chosen_color)
+            wait(500)
             
         elif Button.DOWN in pressed:
             wait(500)
             chosen_color = drop_of_color_1
             color_match_menu_2(chosen_color)
+            wait(500)
         
         if Button.CENTER in pressed:
             run = False
@@ -550,18 +557,22 @@ def interface():
         if Button.LEFT in pressed:
             wait(500)
             zone_menu()
+            interface_HD = False
             
         elif Button.RIGHT in pressed:
             wait(500)
             movement_menu()
+            interface_HD = False
             
         elif Button.UP in pressed:
             wait(500)
             color_menu()
+            interface_HD = False
             
         elif Button.DOWN in pressed:
             wait(500)
             color_zone_menu()
+            interface_HD = False
             wait(500)
 
 
@@ -590,7 +601,6 @@ def periodical_sorting_mode(wait_time):
         go_to_zone(start)
         while not check_location():
             print("No item...")
-            go_up_and_open()
             time.sleep(wait_time) 
 
         print("Item at pickup location!")
