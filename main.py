@@ -416,9 +416,9 @@ def color_match_menu():
     """Handles the color match menu"""
     menu_color_match = """
     Choose which color you want to assign to a zone
-    L. Color 1 {drop_of_color_1}
-    U. Color 2 {drop_of_color_2}
-    R. Color 3 {drop_of_color_3}
+    L. Color 1 Blue
+    U. Color 2 Red
+    R. Color 3 Green
     D.
     """.format(drop_of_color_1=drop_of_color_1, drop_of_color_2=drop_of_color_2, drop_of_color_3=drop_of_color_3)
     chosen_color = drop_of_color_1
