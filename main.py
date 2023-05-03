@@ -426,17 +426,21 @@ def color_match_menu():
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
+            wait(500)
             color_match_menu_2(chosen_color)
             
         elif Button.UP in pressed:
+            wait(500)
             chosen_color = drop_of_color_2
             color_match_menu_2(chosen_color)
             
         elif Button.RIGHT in pressed:
+             wait(500)
             chosen_color = drop_of_color_3
             color_match_menu_2(chosen_color)
             
         elif Button.DOWN in pressed:
+             wait(500)
             chosen_color = drop_of_color_1
             color_match_menu_2(chosen_color)
         
@@ -464,15 +468,19 @@ def color_match_menu_2(chosen_color):
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
+            wait(500)
             assign_color(chosen_color, "1")
             
         elif Button.UP in pressed:
+            wait(500)
             assign_color(chosen_color, "2")
             
         elif Button.RIGHT in pressed:
+            wait(500)
             assign_color(chosen_color, "3")
             
         elif Button.DOWN in pressed:
+            wait(500)
             assign_color(chosen_color, "4")
         
         if Button.CENTER in pressed:
