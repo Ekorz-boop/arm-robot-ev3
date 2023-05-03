@@ -617,7 +617,7 @@ def periodical_sorting_mode(wait_time):
         go_to_zone(start)
         while not check_location():
             print("No item...")
-            time.sleep(wait_time) 
+            time.sleep(wait_time)
 
         print("Item at pickup location!")
         # Perform necessary actions here, e.g., pick up the item and sort it
@@ -626,7 +626,7 @@ def periodical_sorting_mode(wait_time):
         zone = color_zone_dict[str(color)]
         go_to_zone(zone)
         drop()
-            
+
 
 def main():
     # Create the first zone, this zone will be the pickup zone
