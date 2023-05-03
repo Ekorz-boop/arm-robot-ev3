@@ -68,6 +68,12 @@ def pick_up():
     vertical_axis.run_target(20, 120, then=Stop.HOLD)
 
 
+def go_up_and_open():
+    """Function that makes the claw grip and move upward (picking up)"""
+    claw.run_until_stalled(100, then=Stop.HOLD, duty_limit=50)
+    vertical_axis.run_target(20, 120, then=Stop.HOLD)
+
+
 def drop():
     """Function that gently puts the item down and drops it"""
     vertical_axis.run_until_stalled(-100, then=Stop.HOLD, duty_limit=50)
@@ -574,7 +580,8 @@ def periodical_sorting_mode(wait_time):
         global start
         go_to_zone(start)
         while not check_location():
-            print("Waiting for an item at the pickup location...")
+            print("No item...")
+            go_up_and_open()
             time.sleep(wait_time) 
 
         print("Item at pickup location!")
