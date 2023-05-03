@@ -441,12 +441,12 @@ def color_match_menu():
             color_match_menu_2(chosen_color)
             
         elif Button.RIGHT in pressed:
-             wait(500)
+            wait(500)
             chosen_color = drop_of_color_3
             color_match_menu_2(chosen_color)
             
         elif Button.DOWN in pressed:
-             wait(500)
+            wait(500)
             chosen_color = drop_of_color_1
             color_match_menu_2(chosen_color)
         
@@ -562,6 +562,7 @@ def interface():
         elif Button.DOWN in pressed:
             wait(500)
             color_zone_menu()
+            wait(500)
 
 
 # def check_pickup_periodically(interval):
