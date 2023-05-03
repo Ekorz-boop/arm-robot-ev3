@@ -38,14 +38,15 @@ color_zone_dict = {} #Handles which color have which zone
 start = '1'
 current_zone_num = 0
 
-drop_of_color_1 = None
-drop_of_color_2 = None
-drop_of_color_3 = None
+
 c_blue = (2,2,25)
 c_red = (12,0,2)
 c_yellow = (20,10,10)
 c_green = (2,4,7)
 all_colors = [c_blue, c_red, c_yellow, c_green]
+drop_of_color_1 = c_blue
+drop_of_color_2 = c_red
+drop_of_color_3 = c_green
 
 
 # Have display variables for all the menus. Makes sure the output doesn't spam the menu.
