@@ -557,18 +557,22 @@ def interface():
         if Button.LEFT in pressed:
             wait(500)
             zone_menu()
+            interface_HD = False
             
         elif Button.RIGHT in pressed:
             wait(500)
             movement_menu()
+            interface_HD = False
             
         elif Button.UP in pressed:
             wait(500)
             color_menu()
+            interface_HD = False
             
         elif Button.DOWN in pressed:
             wait(500)
             color_zone_menu()
+            interface_HD = False
             wait(500)
 
 
