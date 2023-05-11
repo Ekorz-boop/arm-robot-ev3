@@ -626,6 +626,28 @@ def periodical_sorting_mode(wait_time):
         zone = color_zone_dict[str(color)]
         go_to_zone(zone)
         drop()
+        
+         
+def connect():
+    # This is the name of the remote EV3 or PC we are connecting to.
+    SERVER = "robot1"
+    self = "robot7"
+
+    client = BluetoothMailboxClient()
+    mbox = TextMailbox('greeting', client)
+
+    print('establishing connection...')
+    client.close()
+    client.connect(SERVER)
+    print('connected!')
+
+    # In this program, the client sends the first message and then waits for the
+    # server to reply.
+    
+    # what_to_say = ("Hello" + " " + SERVER + ", " + "I am " + self)
+    # ev3.speaker.say(what_to_say)
+    mbox.send('hello!')
+    return mbox        
 
 
 def main():
