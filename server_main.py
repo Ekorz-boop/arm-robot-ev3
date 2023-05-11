@@ -629,25 +629,20 @@ def periodical_sorting_mode(wait_time):
         
          
 def connect():
-    # This is the name of the remote EV3 or PC we are connecting to.
-    SERVER = "robot1"
-    self = "robot7"
+    server = BluetoothMailboxServer()
+    mbox = TextMailbox('greeting', server)
 
-    client = BluetoothMailboxClient()
-    mbox = TextMailbox('greeting', client)
-
-    print('establishing connection...')
-    client.close()
-    client.connect(SERVER)
+    # The server must be started before the client!
+    print('waiting for connection...')
+    server.wait_for_connection()
     print('connected!')
 
-    # In this program, the client sends the first message and then waits for the
-    # server to reply.
-    
-    # what_to_say = ("Hello" + " " + SERVER + ", " + "I am " + self)
-    # ev3.speaker.say(what_to_say)
-    mbox.send('hello!')
-    return mbox        
+    # In this program, the server waits for the client to send the first message
+    # and then sends a reply.
+    mbox.wait()
+    print(mbox.read())
+    mbox.send('hello to you!')
+    return mbox     
 
 
 def main():
