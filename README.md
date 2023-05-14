@@ -13,10 +13,21 @@ Your readme-file should include the following sections:
 
 This part should give a general introduction to your project.
 
+This project is a University project where a lego mindstorms robot (ev3) is supposed to be programmed with different user stories in mind. 
+The main objective/feature of the project is to enable the robot arm to sort lego bricks according to different criterias. 
+
 
 ## Getting started
 
 This section is supposed to guide a new developer through the steps of how to set up the project and install the deppendencies they need to start developing.
+* Clone the project folder to your computer using git bash ("git clone https://github.com/Ekorz-boop/arm-robot-ev3") in a destination of your choice
+
+* Make sure you have ev3dev-browser, Lego Mindstorms EV3 Microython, Python and Flake8 (optional but recommended) installed. You can install these in the extensions
+tab in visual studio code. 
+
+* Open the folder in visual studio code and sync your instance to the repository using ("git pull") in the folder or via source control in visual studio code.
+
+
 
 
 ## Building and running
