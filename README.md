@@ -1,18 +1,4 @@
-# PA1473 - Software Development: Agile Project (Template)
-
-## Template information
-This template should help your team write a good readme-file for your project. (The file is called README.md in your project directory.)
-You are of course free to add more sections to your readme if you want to.
-
-Readme-files on GitHub are formatted using Markdown. You can find information about how to format using Markdown here: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
-
-Your readme-file should include the following sections:
-
-
 ## Introduction
-
-This part should give a general introduction to your project.
-
 This project is a University project where a lego mindstorms robot (ev3) is supposed to be programmed with different user stories in mind. 
 The main objective/feature of the project is to enable the robot arm to sort lego bricks according to different criterias. 
 
@@ -30,13 +16,21 @@ tab in visual studio code.
 
 ## Building and running
 
-This is where you explain how to make the project run. What is your startup procedure? Does the program accept different arguments to do different things?
-
-You should also describe how to operate your program. Does it need manual input before it starts picking up and sorting the items?
-
 To run the program you first need a ev3 mindstorms robot and all dependencies installed. Then follow these steps:
 
-* 
+* Connect to the robot via the explorer tab in visual studio code, and then under the ev3dev device browser drop down menu (click connect to device and choose the robot you want to connect to)
+
+* Transfer the code you want to run to the robot via the ev3dev device browser menu
+
+* Right click on the file (server_main.py file if you want to run that robot as a server, or the client_main.py if you want the robot to run as a client) and then press "run".
+
+* The code will now run, and you can use the buttons on the hub of the robot to control the menu system. You will need to stay connected to the robot via usb to read the output in visual studio code, which will grant you a view of the menu system and which buttons does what. 
+
+* Create all zones, remember that zone 1 is the pickup zone and should not be overwritten with a new zone. Zone 1 is also the position in which the arm is in when the robot starts, so keep that in mind.
+
+* Assign colors to all the zones (remember to not assign anything to zone 1)
+
+* Run sorting mode in the menu
 
 
 ## Features
