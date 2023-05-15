@@ -662,6 +662,7 @@ def connect():
     return mbox
 
 def i_pull_up():
+    """Sends to the other robot that this robot want to access the "forbidden" zone."""
     mbox.send('pull_up')
     moving = False
     while not moving:
@@ -675,7 +676,7 @@ def transfer_color(color):
 
 
 def get_color():
-    """Thing"""
+    """Looks for a tuple (color) in the mailbox and then returns that color"""
     have_got_color = False
     while not have_got_color:
         if type(mbox.read()) is tuple:
@@ -683,13 +684,14 @@ def get_color():
             have_got_color = True
 
 def avoid_crash():
+    """Makes the robot go to start zone and wait until the other robot is finished in order to avoid an crash"""
     waiting = True
     go_to_zone("1")
     mbox.send("ok")
     while waiting:
         if mbox.read() == "done":
             waiting = False     
- 
+
 
 def main():
     # Start the inerface
