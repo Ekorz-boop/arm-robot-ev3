@@ -10,7 +10,6 @@ from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 import os
 import math
 import time
-from pybricks.messaging import BluetoothMailboxClient, TextMailbox
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
 
@@ -48,7 +47,6 @@ all_colors = [c_blue, c_red, c_yellow, c_green]
 drop_of_color_1 = c_blue
 drop_of_color_2 = c_red
 drop_of_color_3 = c_green
-crash_color = ()
 
 
 # Have display variables for all the menus. Makes sure the output doesn't spam the menu.
@@ -507,7 +505,6 @@ def color_match_menu_2(chosen_color):
         elif Button.DOWN in pressed:
             wait(500)
             assign_color(chosen_color, "4")
-            crash_color = chosen_color
             wait(500)
         
         if Button.CENTER in pressed:
@@ -616,11 +613,7 @@ def interface():
 def periodical_sorting_mode(wait_time):
     run = True
     while run:
-        main_message = mbox.read()
         global start
-        global crash_color
-        if main_message == 'pull_up':
-            avoid_crash()
         go_to_zone(start)
         while not check_location():
             print("No item...")
@@ -630,16 +623,10 @@ def periodical_sorting_mode(wait_time):
         # Perform necessary actions here, e.g., pick up the item and sort it
         pickup_from_start()
         color = color_check()
-        if color == crash_color:
-            i_pull_up()
-            if main_message == 'ok':
-                zone = color_zone_dict[str(color)]
-                go_to_zone(zone)
-                drop()
-        else:
-            zone = color_zone_dict[str(color)]
-            go_to_zone(zone)
-            drop()
+        zone = color_zone_dict[str(color)]
+        go_to_zone(zone)
+        drop()
+        
          
 def connect():
     # This is the name of the remote EV3 or PC we are connecting to.
@@ -650,22 +637,15 @@ def connect():
     mbox = TextMailbox('greeting', client)
 
     print('establishing connection...')
-    try:
-        client.close()
-        client.connect(SERVER)
-        print('connected!')
-    except OSError as err:
-        if err.errno == 112:
-            print("OSError 112 occurred. The network dropped the connection on reset.")
-            print("Try checking your network connections and ensuring the EV3 is in range.")
-            # Here you can add any code to retry the connection or handle the error in another way
-        else:
-            # Re-raise the exception if it's not the one we're trying to handle
-            raise
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        # Again, you can add code here to handle the unexpected error if needed
+    client.close()
+    client.connect(SERVER)
+    print('connected!')
 
+    # In this program, the client sends the first message and then waits for the
+    # server to reply.
+    
+    # what_to_say = ("Hello" + " " + SERVER + ", " + "I am " + self)
+    # ev3.speaker.say(what_to_say)
     mbox.send('hello!')
     return mbox
 
