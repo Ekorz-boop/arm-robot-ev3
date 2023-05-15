@@ -643,22 +643,29 @@ def periodical_sorting_mode(wait_time):
          
 def connect():
     # This is the name of the remote EV3 or PC we are connecting to.
-    SERVER = "robot1"
-    self = "robot7"
+    SERVER = "ev3dev"
+    self = "ev3dev"
 
     client = BluetoothMailboxClient()
     mbox = TextMailbox('greeting', client)
 
     print('establishing connection...')
-    client.close()
-    client.connect(SERVER)
-    print('connected!')
+    try:
+        client.close()
+        client.connect(SERVER)
+        print('connected!')
+    except OSError as err:
+        if err.errno == 112:
+            print("OSError 112 occurred. The network dropped the connection on reset.")
+            print("Try checking your network connections and ensuring the EV3 is in range.")
+            # Here you can add any code to retry the connection or handle the error in another way
+        else:
+            # Re-raise the exception if it's not the one we're trying to handle
+            raise
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        # Again, you can add code here to handle the unexpected error if needed
 
-    # In this program, the client sends the first message and then waits for the
-    # server to reply.
-    
-    # what_to_say = ("Hello" + " " + SERVER + ", " + "I am " + self)
-    # ev3.speaker.say(what_to_say)
     mbox.send('hello!')
     return mbox
 
