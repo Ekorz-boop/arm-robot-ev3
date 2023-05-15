@@ -25,9 +25,9 @@ This section is supposed to guide a new developer through the steps of how to se
 * Make sure you have ev3dev-browser, Lego Mindstorms EV3 Microython, Python and Flake8 (optional but recommended) installed. You can install these in the extensions
 tab in visual studio code. 
 
-* Open the folder in visual studio code and sync your instance to the repository using ("git pull") in the folder or via source control in visual studio code.
+* Open the folder in visual studio code and sync your instance to the repository using ("git pull") in the folder via git bash or via the source control tab in visual studio code.
 
-
+* Now you have the latest version and can make changes, commit and push via the visual studio code source control tab for convenience.
 
 
 ## Building and running
@@ -35,6 +35,10 @@ tab in visual studio code.
 This is where you explain how to make the project run. What is your startup procedure? Does the program accept different arguments to do different things?
 
 You should also describe how to operate your program. Does it need manual input before it starts picking up and sorting the items?
+
+To run the program you first need a ev3 mindstorms robot and all dependencies installed. Then follow these steps:
+
+* 
 
 
 ## Features
