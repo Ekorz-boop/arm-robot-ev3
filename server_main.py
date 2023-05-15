@@ -166,7 +166,7 @@ def go_to_zone(zone):
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
     horizontal_axis.run_target(speed, get_h_angle(zone), then=Stop.COAST)
-    vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
+    vertical_axis.run_target(90,get_v_angle(zone),then=Stop.COAST)
 
 def set_pickup_zone(zone):
     """Sets the pickup zone to the start position"""
