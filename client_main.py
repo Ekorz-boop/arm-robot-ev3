@@ -637,7 +637,7 @@ def connect():
     mbox = TextMailbox('greeting', client)
 
     print('establishing connection...')
-    client.close()
+    #client.close()
     client.connect(SERVER)
     print('connected!')
 
