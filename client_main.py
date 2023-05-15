@@ -631,7 +631,7 @@ def periodical_sorting_mode(wait_time):
         color = color_check()
         if color == crash_color:
             i_pull_up()
-            if main_message == 'ok'
+            if main_message == 'ok':
                 zone = color_zone_dict[str(color)]
                 go_to_zone(zone)
                 drop()
