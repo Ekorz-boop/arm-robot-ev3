@@ -40,19 +40,19 @@ To run the program you first need a ev3 mindstorms robot and all dependencies in
 
 
 ## Features
-- [DONE] US_1:  As a customer, I want the robot to pick up items
-- [DONE] US_1B: As a customer, I want the robot to pick up items from a designated position
-- [DONE] US_2: As a customer, I want the robot to drop off items
-- [DONE] US_2B: As a customer, I want the robot to drop items off at a designated position.
-- [DONE] US_3: As a customer, I want the robot to be able to determine if an item is present at a given location.
-- [DONE] US_4: As a customer, I want the robot to tell me the color of an item.
-- [DONE] US_5: As a customer, I want the robot to drop items off at different locations based on the color of the item.
-- [DONE] US_6: As a customer, I want the robot to be able to pick up items from elevated positions
-- [DONE] US_8: As a customer, I want to be able to calibrate maximum of three different colors and assign them to specific drop-off zones.
-- [DONE] US_8B: As a customer, I want to be able to calibrate items with three different colors and drop the items off at specific drop-off zones based on color
-- [DONE] US_9: As a customer, I want the robot to check the pickup location periodically to see if a new item has arrived.
-- [DONE] US_10: As a customer, I want the robots to sort items at a specific time. 
+- [x] US_1:  As a customer, I want the robot to pick up items
+- [x] US_1B: As a customer, I want the robot to pick up items from a designated position
+- [x] US_2: As a customer, I want the robot to drop off items
+- [x] US_2B: As a customer, I want the robot to drop items off at a designated position.
+- [x] US_3: As a customer, I want the robot to be able to determine if an item is present at a given location.
+- [x] US_4: As a customer, I want the robot to tell me the color of an item.
+- [x] US_5: As a customer, I want the robot to drop items off at different locations based on the color of the item.
+- [x] US_6: As a customer, I want the robot to be able to pick up items from elevated positions
+- [x] US_8: As a customer, I want to be able to calibrate maximum of three different colors and assign them to specific drop-off zones.
+- [x] US_8B: As a customer, I want to be able to calibrate items with three different colors and drop the items off at specific drop-off zones based on color
+- [x] US_9: As a customer, I want the robot to check the pickup location periodically to see if a new item has arrived.
+- [x] US_10: As a customer, I want the robots to sort items at a specific time. 
 - [ ] US_11: As a customer, I want two robots to communicate and work together on items sorting without colliding with each other.
-- [DONE] US_12: As a customer, I want to be able to manually set the locations and heights of one pick-up zone and two drop-off zones. (Implemented either by manually dragging the arm to a position or using buttons).
+- [x] US_12: As a customer, I want to be able to manually set the locations and heights of one pick-up zone and two drop-off zones. (Implemented either by manually dragging the arm to a position or using buttons).
 
 
