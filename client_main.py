@@ -647,16 +647,21 @@ def connect():
     # what_to_say = ("Hello" + " " + SERVER + ", " + "I am " + self)
     # ev3.speaker.say(what_to_say)
     mbox.send('hello!')
-    return mbox        
+    return mbox
+
+
+def transfer_color(color):
+    """Sends the color the other robot"""
+    mbox.send(color)
 
 
 def main():
-    # Create the first zone, this zone will be the pickup zone
-    create_zone()
-
     # Start the inerface
     interface()
 
 
 if __name__ == "__main__":
-    main()
+    mbox = connect()
+    create_zone()
+    while True:
+        main()

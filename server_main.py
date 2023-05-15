@@ -645,6 +645,11 @@ def connect():
     return mbox     
 
 
+def transfer_color(color):
+    """Sends the color the other robot"""
+    mbox.send(color)
+
+
 def main():
     # Create the first zone, this zone will be the pickup zone
     create_zone()
