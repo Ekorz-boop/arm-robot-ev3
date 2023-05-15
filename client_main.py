@@ -655,6 +655,15 @@ def transfer_color(color):
     mbox.send(color)
 
 
+def get_color():
+    """Thing"""
+    have_got_color = False
+    while not have_got_color:
+        if type(mbox.read()) is tuple:
+            return mbox.read()
+            have_got_color = True
+
+
 def main():
     # Start the inerface
     interface()
