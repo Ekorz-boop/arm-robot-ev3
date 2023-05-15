@@ -47,6 +47,7 @@ all_colors = [c_blue, c_red, c_yellow, c_green]
 drop_of_color_1 = c_blue
 drop_of_color_2 = c_red
 drop_of_color_3 = c_green
+crash_color = ()
 
 
 # Have display variables for all the menus. Makes sure the output doesn't spam the menu.
@@ -505,6 +506,7 @@ def color_match_menu_2(chosen_color):
         elif Button.DOWN in pressed:
             wait(500)
             assign_color(chosen_color, "4")
+            crash_color = chosen_color
             wait(500)
         
         if Button.CENTER in pressed:
@@ -613,7 +615,11 @@ def interface():
 def periodical_sorting_mode(wait_time):
     run = True
     while run:
+        main_message = mbox.read()
         global start
+        global crash_color
+        if main_message == 'pull_up':
+            avoid_crash()
         go_to_zone(start)
         while not check_location():
             print("No item...")
@@ -623,10 +629,16 @@ def periodical_sorting_mode(wait_time):
         # Perform necessary actions here, e.g., pick up the item and sort it
         pickup_from_start()
         color = color_check()
-        zone = color_zone_dict[str(color)]
-        go_to_zone(zone)
-        drop()
-        
+        if color == crash_color:
+            i_pull_up()
+            if main_message == 'ok'
+                zone = color_zone_dict[str(color)]
+                go_to_zone(zone)
+                drop()
+        else:
+            zone = color_zone_dict[str(color)]
+            go_to_zone(zone)
+            drop()
          
 def connect():
     # This is the name of the remote EV3 or PC we are connecting to.
