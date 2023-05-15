@@ -9,7 +9,7 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 import os
 import math
-import time
+
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
 
@@ -34,19 +34,18 @@ vertical_axis.reset_angle(0)
 color_sensor = ColorSensor(Port.S2)
 
 zone_dict = {} #Handles which zone have which angle coordinates
-color_zone_dict = {} #Handles which color have which zone
-start = '1'
+color_dict = {} #Handles which color have which zone
+start = None
 current_zone_num = 0
 
-
-c_blue = (2,2,25)
-c_red = (12,0,2)
-c_yellow = (20,10,10)
-c_green = (2,4,7)
+drop_of_color_1 = None
+drop_of_color_2 = None
+drop_of_color_3 = None
+c_blue = (2,5,30)
+c_red = (15,3,2)
+c_yellow = (15,10,2)
+c_green = (2,10,10)
 all_colors = [c_blue, c_red, c_yellow, c_green]
-drop_of_color_1 = c_blue
-drop_of_color_2 = c_red
-drop_of_color_3 = c_green
 
 
 # Have display variables for all the menus. Makes sure the output doesn't spam the menu.
@@ -68,12 +67,6 @@ def pick_up():
     vertical_axis.run_target(20, 120, then=Stop.HOLD)
 
 
-def open_claw():
-    """Function that makes the claw grip and move upward (picking up)"""
-    claw.run_until_stalled(100, then=Stop.HOLD, duty_limit=50)
-    
-
-
 def drop():
     """Function that gently puts the item down and drops it"""
     vertical_axis.run_until_stalled(-100, then=Stop.HOLD, duty_limit=50)
@@ -86,7 +79,6 @@ def check_location():
     claw.run_until_stalled(20, then=Stop.HOLD, duty_limit=50)
     if (claw.angle() > -10):
         print("No Item")
-        claw.run_until_stalled(-20, then=Stop.HOLD, duty_limit=50)
         return False
  
     else:
@@ -130,10 +122,9 @@ def create_zone():
     
     
 def assign_color(color, zone):
-    """Assigns a color to a zone."""
-    color_zone_dict[str(color)] = zone
-    print(color_zone_dict)
-   
+    """Assigns a zone to a color and saves it in a dictionary"""
+    color_dict[str(color)] = zone
+    wait(200)
 
 
 def get_h_angle(zone):
@@ -155,48 +146,34 @@ def get_v_angle(zone):
 def go_to_zone(zone):
     """Function that turns the arm to the desigated zone"""
     print(zone_dict)
-    if zone not in zone_dict:
-        print("Zone not found in zone_dict")
-        return
-
     vertical_axis.run_target(-90, 110, then=Stop.HOLD) 
     speed = 70
     if get_h_angle(zone) <= 0:
         speed = speed * -1
     elif get_h_angle(zone) > 0 and speed == -70:
         speed = speed * -1
-    horizontal_axis.run_target(speed, get_h_angle(zone), then=Stop.COAST)
-    vertical_axis.run_target(90,get_v_angle(zone),then=Stop.COAST)
+    horizontal_axis.run_target(get_h_angle(zone), speed, then=Stop.COAST)
+    vertical_axis.run_until_stalled(-90, then=Stop.COAST, duty_limit=50)
 
 def set_pickup_zone(zone):
     """Sets the pickup zone to the start position"""
     global start
     start = zone
 
-
 def pickup_from_start():
-    pick_up()
-    detected_color = color_check()
-    target_zone = None
-
-    for zone, color in color_zone_dict.items():
-        if color == detected_color:
-            target_zone = zone
-            break
-
-    if target_zone:
-        go_to_zone(target_zone)
-        drop()
-    else:
-        print("Color not assigned to any zone.")
+    """Pick up block from the starting position"""
+    global start
+    zone = start
+    go_to_zone(zone)
+    if check_location():
+        pick_up()
+    
 
 
 def color_check():
     """Function that tells the color"""
-    vertical_axis.run_target(40, 90, then=Stop.HOLD)
+    vertical_axis.run_target(40, 95, then=Stop.HOLD)
     color = determine_color(color_sensor.rgb())
-    print(color_sensor.rgb())
-    print(color)
     show_color(color)
     return color
 
@@ -210,20 +187,13 @@ def euclidean_distance(test_color, color):
 
 
 def determine_color(test_color):
-    """Returns the color closest matching the input color using Euclidean distance in the RGB color space"""
-    global c_red, c_blue, c_green, c_yellow
-    all_colors = [c_red, c_blue, c_green, c_yellow]
-    closest_match = all_colors[0]
-    min_distance = euclidean_distance(test_color, closest_match)
-
-    for color in all_colors[1:]:
-        distance = euclidean_distance(test_color, color)
-        if distance < min_distance:
-            min_distance = distance
+    """Returns the color closest matching the input color"""
+    closest_match = (0, 0, 0)
+    for color in all_colors:
+        if euclidean_distance(test_color, color) < euclidean_distance(closest_match, color):
             closest_match = color
-
+    
     return closest_match
-
 
 def show_color(color):
     if color == c_blue:
@@ -236,8 +206,7 @@ def show_color(color):
         text = "Red"
     ev3.screen.clear()
     ev3.screen.draw_text(0, 20, text, text_color=Color.BLACK, background_color=None)
-    wait(4000)
-    ev3.screen.clear()
+    wait(3000)
 
 def drop_of_color_calibrate():
     """Checks and saves colors (up to 3 colors)"""
@@ -270,7 +239,6 @@ def movement_menu():
     D. Down
     """
     global movement_menu_HD
-    set_starter_menu_HD = False
     run = True
     while run:
         if not movement_menu_HD:
@@ -281,7 +249,7 @@ def movement_menu():
         
         if Button.CENTER in pressed:
             run = False
-            movement_menu_HD = False
+            movement_menu_HD = True
 
 def zone_menu():
     """Handles the zone menu"""
@@ -292,7 +260,6 @@ def zone_menu():
     D. Go to zone
     """
     global zone_menu_HD
-    set_starter_menu_HD = False
     run = True
     while run:
         if not zone_menu_HD:
@@ -309,7 +276,7 @@ def zone_menu():
             wait(500)
         elif Button.LEFT in pressed:
             wait(500)
-            set_starter_menu()
+            Set_starter_menu()
             wait(500)
         elif Button.RIGHT in pressed:
             wait(500)
@@ -317,7 +284,7 @@ def zone_menu():
             wait(500)
         if Button.CENTER in pressed:
             run = False
-            zone_menu_HD = False
+            zone_menu_HD = True
 
 def go_to_zone_menu():
     """Handles the go to zone choice menu"""
@@ -328,7 +295,6 @@ def go_to_zone_menu():
     D. Zone 4
     """
     global go_to_zone_menu_HD
-    set_starter_menu_HD = False
     run = True
     while run:
         if not go_to_zone_menu_HD:
@@ -338,26 +304,22 @@ def go_to_zone_menu():
         if Button.LEFT in pressed:
             zone = "1"
             go_to_zone(zone)
-            wait(500)
                     
         elif Button.UP in pressed:
             zone = "2"
             go_to_zone(zone)
-            wait(500)
             
         elif Button.RIGHT in pressed:
             zone = "3"
             go_to_zone(zone)
-            wait(500)
             
         elif Button.DOWN in pressed:
             zone = "4"
             go_to_zone(zone)
-            wait(500)
             
         if Button.CENTER in pressed:
             run = False
-            go_to_zone_menu_HD = False
+            go_to_zone_menu_HD = True
 
 def color_menu():
     """Handles the color menu"""
@@ -377,18 +339,13 @@ def color_menu():
         
         if Button.CENTER in pressed:
             run = False
-            color_menu_HD = False
+            color_menu_HD = True
         
         if Button.UP in pressed:
-            wait(500)
             color_check()
-            
         elif Button.LEFT in pressed:
-            wait(500)
             pick_up()
-            
         elif Button.RIGHT in pressed:
-            wait(500)
             drop()
 
 def color_zone_menu():
@@ -396,11 +353,10 @@ def color_zone_menu():
     menu_color_zone = """
     L. 
     U. Assign color to zone
-    R. Periodical sorting mode
+    R. 
     D. 
     """
     global color_zone_menu_HD
-    set_starter_menu_HD = False
     run = True
     while run:
         if not color_zone_menu_HD:
@@ -409,31 +365,24 @@ def color_zone_menu():
         pressed = ev3.buttons.pressed()
         
         if Button.UP in pressed:
-            wait(500)
             color_match_menu()
-            wait(500)
         
-        elif Button.RIGHT in pressed:
-            wait(500)
-            periodical_sorting_mode(2)  # I think it is seconds here
-
         if Button.CENTER in pressed:
             run = False
-            color_zone_menu_HD = False
+            color_zone_menu_HD = True
         
 
 def color_match_menu():
     """Handles the color match menu"""
     menu_color_match = """
     Choose which color you want to assign to a zone
-    L. Color 1 Blue
-    U. Color 2 Red
-    R. Color 3 Green
+    L. Color 1 {drop_of_color_1}
+    U. Color 2 {drop_of_color_2}
+    R. Color 3 {drop_of_color_3}
     D.
     """.format(drop_of_color_1=drop_of_color_1, drop_of_color_2=drop_of_color_2, drop_of_color_3=drop_of_color_3)
     chosen_color = drop_of_color_1
     global color_match_menu_HD
-    set_starter_menu_HD = False
     run = True
     while run:
         if not color_match_menu_HD:
@@ -442,31 +391,23 @@ def color_match_menu():
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
-            wait(500)
             color_match_menu_2(chosen_color)
-            wait(500)
             
         elif Button.UP in pressed:
-            wait(500)
             chosen_color = drop_of_color_2
             color_match_menu_2(chosen_color)
-            wait(500)
             
         elif Button.RIGHT in pressed:
-            wait(500)
             chosen_color = drop_of_color_3
             color_match_menu_2(chosen_color)
-            wait(500)
             
         elif Button.DOWN in pressed:
-            wait(500)
             chosen_color = drop_of_color_1
             color_match_menu_2(chosen_color)
-            wait(500)
         
         if Button.CENTER in pressed:
             run = False
-            color_match_menu_HD = False
+            color_match_menu_HD = True
 
 
 def color_match_menu_2(chosen_color):
@@ -479,7 +420,6 @@ def color_match_menu_2(chosen_color):
     D. Zone 4
     """
     global color_match_menu_2_HD
-    set_starter_menu_HD = False
     run = True
     while run:
         if not color_match_menu_2_HD:
@@ -488,28 +428,20 @@ def color_match_menu_2(chosen_color):
         pressed = ev3.buttons.pressed()
         
         if Button.LEFT in pressed:
-            wait(500)
             assign_color(chosen_color, "1")
-            wait(500)
             
         elif Button.UP in pressed:
-            wait(500)
             assign_color(chosen_color, "2")
-            wait(500)
             
         elif Button.RIGHT in pressed:
-            wait(500)
             assign_color(chosen_color, "3")
-            wait(500)
             
         elif Button.DOWN in pressed:
-            wait(500)
             assign_color(chosen_color, "4")
-            wait(500)
         
         if Button.CENTER in pressed:
             run = False
-            color_match_menu_2_HD = False
+            color_match_menu_2_HD = True
 
 def set_starter_menu():
     """User chooses a starter location"""
@@ -521,7 +453,6 @@ def set_starter_menu():
     D. Zone 4
     """
     global set_starter_menu_HD
-    set_starter_menu_HD = False
     run = True
     while run:
         if not set_starter_menu_HD:
@@ -532,26 +463,21 @@ def set_starter_menu():
         if Button.LEFT in pressed:
             zone = '1'
             set_pickup_zone(zone)
-            wait(500)
             
         elif Button.UP in pressed:
             zone = '2'
             set_pickup_zone(zone)
-            wait(500)
             
         elif Button.RIGHT in pressed:
             zone = '3'
             set_pickup_zone(zone)
-            wait(500)
-            
         elif Button.DOWN in pressed:
             zone = '4'
             set_pickup_zone(zone)
-            wait(500)
         
         if Button.CENTER in pressed:
             run = False
-            set_starter_menu_HD = False
+            set_starter_menu_HD = True
             
             
 def interface():
@@ -573,119 +499,41 @@ def interface():
         if Button.LEFT in pressed:
             wait(500)
             zone_menu()
-            interface_HD = False
             
         elif Button.RIGHT in pressed:
             wait(500)
             movement_menu()
-            interface_HD = False
             
         elif Button.UP in pressed:
             wait(500)
             color_menu()
-            interface_HD = False
             
         elif Button.DOWN in pressed:
             wait(500)
             color_zone_menu()
-            interface_HD = False
-            wait(500)
 
+###################################################################
 
-# def check_pickup_periodically(interval):
-#     """Periodically checks the pickup location for a new item and performs necessary actions."""
-#     while True:
-#         global start
-#         go_to_zone(start)
-#         if check_location():
-#             print("Item at pickup location!")
-#             # Perform necessary actions here, e.g., pick up the item and sort it
-#             pickup_from_start()
-#             color = color_check()
-#             zone = color_dict[str(color)]
-#             go_to_zone(zone)
-#             drop()
-#         else:
-#             print("No item at pickup location.")
-#         time.sleep(interval)
+item_color_1 = 'red'
+item_color_2 = 'green'
+item_color_3 = 'blue'
+item_color_4 = 'yellow'
 
-
-def periodical_sorting_mode(wait_time):
-    run = True
-    while run:
-        global start
-        go_to_zone(start)
-        while not check_location():
-            print("No item...")
-            time.sleep(wait_time)
-
-        print("Item at pickup location!")
-        # Perform necessary actions here, e.g., pick up the item and sort it
-        pickup_from_start()
-        color = color_check()
-        zone = color_zone_dict[str(color)]
-        go_to_zone(zone)
-        drop()
+def sort_items():
+    color_1 = color_sensor.color_name
+    
+    if color_1 == item_color_1 or color_1 == item_color_2:
+        # röra åt häöger?
         
-         
-def connect():
-    # This is the name of the remote EV3 or PC we are connecting to.
-    SERVER = "robot1"
-    self = "robot7"
+    elif color_1 == item_color_3 or color_1 == item_color_4:
+        # röra åt vänster?
 
-    client = BluetoothMailboxClient()
-    mbox = TextMailbox('greeting', client)
-
-    print('establishing connection...')
-    client.close()
-    client.connect(SERVER)
-    print('connected!')
-
-    # In this program, the client sends the first message and then waits for the
-    # server to reply.
-    
-    # what_to_say = ("Hello" + " " + SERVER + ", " + "I am " + self)
-    # ev3.speaker.say(what_to_say)
-    mbox.send('hello!')
-    return mbox
-
-def i_pull_up():
-    mbox.send('pull_up')
-    moving = False
-    while not moving:
-        if mbox.read() == "ok":
-            moving = True
-    
-
-def transfer_color(color):
-    """Sends the color the other robot"""
-    mbox.send(color)
-
-
-def get_color():
-    """Thing"""
-    have_got_color = False
-    while not have_got_color:
-        if type(mbox.read()) is tuple:
-            return mbox.read()
-            have_got_color = True
-
-def avoid_crash():
-    waiting = True
-    go_to_zone("1")
-    mbox.send("ok")
-    while waiting:
-        if mbox.read() == "done":
-            waiting = False     
- 
-
+#############################################################################
 def main():
-    # Start the inerface
-    interface()
+    """Main function"""
+
+    
 
 
 if __name__ == "__main__":
-    mbox = connect()
-    create_zone()
-    while True:
-        main()
+    m ain()

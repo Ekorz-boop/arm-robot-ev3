@@ -664,6 +664,14 @@ def get_color():
             return mbox.read()
             have_got_color = True
 
+def avoid_crash():
+    waiting = True
+    go_to_zone("1")
+    mbox.send("ok")
+    while waiting:
+        if mbox.read() == "done":
+            waiting = False     
+ 
 
 def main():
     # Start the inerface
