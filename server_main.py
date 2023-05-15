@@ -194,7 +194,7 @@ def pickup_from_start():
 
 def color_check():
     """Function that tells the color"""
-    vertical_axis.run_target(40, 90, then=Stop.HOLD)
+    vertical_axis.run_target(40, 85, then=Stop.HOLD)
     color = determine_color(color_sensor.rgb())
     print(color_sensor.rgb())
     print(color)
@@ -616,6 +616,7 @@ def periodical_sorting_mode(wait_time):
     run = True
     while run:
         main_message = mbox.read()
+        print(main_message)
         global start
         global crash_color
         if main_message == 'pull_up':
@@ -630,11 +631,13 @@ def periodical_sorting_mode(wait_time):
         pickup_from_start()
         color = color_check()
         if color == crash_color:
+            print(crash_color)
             i_pull_up()
             if main_message == 'ok':
                 zone = color_zone_dict[str(color)]
                 go_to_zone(zone)
                 drop()
+                mbox.send('done')
         else:
             zone = color_zone_dict[str(color)]
             go_to_zone(zone)
@@ -686,7 +689,9 @@ def avoid_crash():
     mbox.send("ok")
     while waiting:
         if mbox.read() == "done":
-            waiting = False     
+            waiting = False
+        else:
+            wait(10)
  
 
 def main():
