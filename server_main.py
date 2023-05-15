@@ -644,6 +644,13 @@ def connect():
     mbox.send('hello to you!')
     return mbox     
 
+def i_pull_up():
+    mbox.send('pull_up')
+    moving = False
+    while not moving:
+        if mbox.read() == "ok":
+            moving = True
+    
 
 def transfer_color(color):
     """Sends the color the other robot"""
