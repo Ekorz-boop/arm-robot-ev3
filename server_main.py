@@ -643,8 +643,7 @@ def connect():
     print(mbox.read())
     mbox.send('hello to you!')
     return mbox     
-
-
+   
 def transfer_color(color):
     """Sends the color the other robot"""
     mbox.send(color)
@@ -657,6 +656,14 @@ def get_color():
             return mbox.read()
             have_got_color = True
 
+def avoid_crash():
+    waiting = True
+    go_to_zone("1")
+    mbox.send("ok")
+    while waiting:
+        if mbox.read() == "done":
+            waiting = False     
+ 
 
 def main():
     # Start the inerface
