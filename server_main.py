@@ -651,12 +651,11 @@ def transfer_color(color):
 
 
 def main():
-    # Create the first zone, this zone will be the pickup zone
-    create_zone()
-
     # Start the inerface
     interface()
 
 
 if __name__ == "__main__":
+    mbox = connect()
+    create_zone()
     main()
