@@ -643,8 +643,8 @@ def periodical_sorting_mode(wait_time):
          
 def connect():
     # This is the name of the remote EV3 or PC we are connecting to.
-    SERVER = "robot1"
-    self = "robot7"
+    SERVER = "ev3dev"
+    self = "ev3dev"
 
     client = BluetoothMailboxClient()
     mbox = TextMailbox('greeting', client)
